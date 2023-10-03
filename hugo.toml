@@ -1,0 +1,56 @@
+baseURL = 'https://example.org/'
+languageCode = 'en-us'
+title = 'My New Hugo Site'
+theme = "/Users/saravanan.m/Desktop/personal/go/anatole"
+summarylength =10 
+pygmentsCodeFences = true
+pygmentsUseClasses = true
+[params]
+	title = "Saravana's Blog"
+	author = "Saravanan"
+	description = "A curated version of my thoughts"
+	profilePicture = "images/profile.jpg"
+	#contactFormAction = "https://formspree.io/f/your-form-hash-here"
+	displayMode = "dark"
+	contentratio = 0.7
+	customCss = ["css/syntax.css"]
+	listDateFormat = "Jan 2"
+	singleDateFormat = "Mon, Jan 2, 2006"
+	indexDateFormat = "Mon, Jan 2, 2006"
+	readMore = true
+	thumnail_height = 200
+[[params.socialIcons]]
+	icon = "fab fa-linkedin"
+	title = "Linkedin"
+	url = "https://www.linkedin.com/in/saravanan-m-100728186/"
+
+[[params.socialIcons]]
+	icon = "fab fa-github"
+	title = "Github"
+	url = "https://www.linkedin.com/in/saravanan-m-100728186/"
+[menu]
+
+  [[menu.main]]
+  name = "Posts"
+  identifier = "Posts"
+  weight = 100
+  url = "/"
+
+  [[menu.main]]
+  name = "About"
+  weight = 300
+  identifier = "about"
+  url = "/about/"
+
+  
+  [[menu.main]] 
+  name = "Contact"
+  weight = 600
+  identifier = "contact"
+  url = "/contact/"
+
+
+[taxonomies]
+    category = "categories"
+    series = "series"
+    tag = "tags"
