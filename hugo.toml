@@ -5,6 +5,7 @@ theme = "/Users/saravanan.m/Desktop/personal/go/anatole"
 summarylength =10 
 pygmentsCodeFences = true
 pygmentsUseClasses = true
+disqusShortname = "saravanas-blog"
 [params]
 	title = "Saravana's Blog"
 	author = "Saravanan"

@@ -4,7 +4,6 @@ date = 2023-10-02T13:50:39+05:30
 draft = true
 tags = ["thumbnail"]
 toc = true
-thumbnail = "antiif.jpeg"  
 +++
 
 ## Test
