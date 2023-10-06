@@ -1,7 +1,7 @@
 baseURL = 'https://example.org/'
 languageCode = 'en-us'
 title = 'My New Hugo Site'
-theme = "/Users/saravanan.m/Desktop/personal/go/anatole"
+theme = "anatole"
 summarylength =10 
 pygmentsCodeFences = true
 pygmentsUseClasses = true
