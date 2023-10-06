@@ -55,3 +55,8 @@ disqusShortname = "saravanas-blog"
     category = "categories"
     series = "series"
     tag = "tags"
+[params.umami]
+serverURL = "umami-production-5ca8.up.railway.app"
+id = "818a9100-58b7-43f0-a9b6-c65df2e55f3c"
+trackerScriptName = "script.js"
+
