@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Flutter rendering gibberish characters from REST-API?</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Flutter rendering gibberish characters from REST-API?</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+A way to encode the text data correctly from REST-API’s in flutter.
+</section>
+<section data-field="body" class="e-content">
+<section name="da34" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="7123" id="7123" class="graf graf--h3 graf--leading graf--title">Flutter rendering Gibberish Characters from REST-API?</h3><p name="cd55" id="cd55" class="graf graf--p graf-after--h3">In my first internship, I was given a task to debug why some of the responses from the REST-API are rendered as gibberish characters. I was confused at first but when I finally found out that dart uses UTF-16 encoded strings, all my doubts are cleared. How did I solve the issue? Let me share with you.</p><figure name="abae" id="abae" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*PInGpTTWsmCyC6aWUvvxSw.png" data-width="6016" data-height="4016" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*PInGpTTWsmCyC6aWUvvxSw.png"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/@benwhitephotography?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" data-href="https://unsplash.com/@benwhitephotography?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">Ben White</a> on <a href="https://unsplash.com/s/photos/confused?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" data-href="https://unsplash.com/s/photos/confused?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">Unsplash</a></figcaption></figure><p name="1aa7" id="1aa7" class="graf graf--p graf-after--figure">Most of the time, REST-API&#39;s respond with UTF-8 encoded strings. Since strings in dart are UTF-16 encoded, it converts some of the characters to completely different characters.</p><p name="d909" id="d909" class="graf graf--p graf-after--p">Example:</p><ul class="postList"><li name="0146" id="0146" class="graf graf--li graf-after--p">UTF-8 representation of å : <code class="markup--code markup--li-code"><strong class="markup--strong markup--li-strong">0xC3 0xA5</strong></code></li><li name="b487" id="b487" class="graf graf--li graf-after--li">UTF-16 representation of å : <code class="markup--code markup--li-code"><strong class="markup--strong markup--li-strong">0x00E5</strong></code></li></ul><figure name="6f1f" id="6f1f" class="graf graf--figure graf-after--li"><img class="graf-image" data-image-id="1*NYj9u_8CAoyju4WLsGfzCw.png" data-width="794" data-height="190" src="https://cdn-images-1.medium.com/max/800/1*NYj9u_8CAoyju4WLsGfzCw.png"></figure><p name="f77f" id="f77f" class="graf graf--p graf-after--figure">As you can see, how differently they are decoded. This may drive new developers(like me) crazy. In <a href="https://www.postman.com/" data-href="https://www.postman.com/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Postman </a>everything may look fine but when you render the text, it is completely different.</p><p name="53ac" id="53ac" class="graf graf--p graf-after--p">It’s like, what you ask🚗 your parents for Christmas Vs what they buy🎠 for you.</p><p name="8799" id="8799" class="graf graf--p graf-after--p">But don’t worry, dart got your back. Using <code class="markup--code markup--p-code">dart:convert</code> package, you can decode the strings using <code class="markup--code markup--p-code"><strong class="markup--strong markup--p-strong">UTF-8</strong></code> instead of the default <code class="markup--code markup--p-code">UTF-16</code>.</p><ol class="postList"><li name="15d5" id="15d5" class="graf graf--li graf-after--p">Import <code class="markup--code markup--li-code">utf8 </code>from <code class="markup--code markup--li-code">dart:convert</code></li></ol><pre name="c82e" id="c82e" class="graf graf--pre graf-after--li">import “dart:convert” show <strong class="markup--strong markup--pre-strong">utf8</strong>;</pre><p name="105d" id="105d" class="graf graf--p graf-after--pre">2. Decode using utf8.decode()</p><figure name="ff6a" id="ff6a" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*IY2KTcAJ9cKtGwLJ6jmXGg.png" data-width="762" data-height="197" src="https://cdn-images-1.medium.com/max/800/1*IY2KTcAJ9cKtGwLJ6jmXGg.png"></figure><p name="6512" id="6512" class="graf graf--p graf-after--figure">Steps:</p><ol class="postList"><li name="b5c3" id="b5c3" class="graf graf--li graf-after--p">Convert the strings to runes.</li><li name="4b44" id="4b44" class="graf graf--li graf-after--li">Use the utf8.decode([string])</li></ol><p name="12c0" id="12c0" class="graf graf--p graf-after--li">It is as simple as that. If you are not satisfied and want to know what the hell is a <code class="markup--code markup--p-code">rune</code>? I’ve got you covered. Please Continue🎈 reading.</p><h4 name="d9fa" id="d9fa" class="graf graf--h4 graf-after--p">What are Runes in dart?</h4><blockquote name="2ce2" id="2ce2" class="graf graf--pullquote graf-after--h4">A <strong class="markup--strong markup--pullquote-strong">rune</strong> is an integer representing a Unicode code point.</blockquote><ul class="postList"><li name="afed" id="afed" class="graf graf--li graf-after--pullquote"><code class="markup--code markup--li-code">[string].runes</code> returns the <strong class="markup--strong markup--li-strong">Unicode code points</strong> in the string.</li></ul><pre name="0467" id="0467" class="graf graf--pre graf-after--li">print(utf8Encoded.runes); // <strong class="markup--strong markup--pre-strong">for the above code : (195, 165)</strong></pre><blockquote name="7808" id="7808" class="graf graf--blockquote graf-after--pre">Dart represents strings as a sequence of <strong class="markup--strong markup--blockquote-strong">Unicode UTF-16 code units</strong>. Unicode is a format that defines a <strong class="markup--strong markup--blockquote-strong">unique numeric value</strong> for each letter, digit, and symbol.</blockquote><pre name="3d4b" id="3d4b" class="graf graf--pre graf-after--blockquote">String alpha=<em class="markup--em markup--pre-em">&quot;</em>abcd<em class="markup--em markup--pre-em">&quot;</em>; <br>print(alpha.runes); //<strong class="markup--strong markup--pre-strong">(97, 98, 99, 100)</strong></pre><p name="5f62" id="5f62" class="graf graf--p graf-after--pre">As you can see, <code class="markup--code markup--p-code">UTF-16</code> code units are just like ASCII values but<strong class="markup--strong markup--p-strong"> ASCII represents lowercase letters (a-z)</strong>, uppercase letters (A-Z), digits (0–9), and symbols such as punctuation marks while <strong class="markup--strong markup--p-strong">Unicode represents letters of English, Arabic, Greek, etc</strong>.</p><blockquote name="3fac" id="3fac" class="graf graf--blockquote graf-after--p graf--trailing"><strong class="markup--strong markup--blockquote-strong">Bonus-knowledge</strong>: <strong class="markup--strong markup--blockquote-strong">Mojibake </strong>is the garbled text that is the result of text being decoded using an unintended character encoding.</blockquote></div></div></section><section name="d57a" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="0efe" id="0efe" class="graf graf--p graf--leading graf--trailing">I just wanted to share something I’ve learned in my internship, hope you’ve also learned something new. Thanks for reading. Clap👏 if you&#39;ve liked this article.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@imsaravananm" class="p-author h-card">Saravanan M</a> on <a href="https://medium.com/p/5d5093ff7ad4"><time class="dt-published" datetime="2021-07-23T18:09:26.266Z">July 23, 2021</time></a>.</p><p><a href="https://medium.com/@imsaravananm/flutter-rendering-gibberish-characters-from-rest-api-5d5093ff7ad4" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on October 7, 2023.</p></footer></article></body></html>

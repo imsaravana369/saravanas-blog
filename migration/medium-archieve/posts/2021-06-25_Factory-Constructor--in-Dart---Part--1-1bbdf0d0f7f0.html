@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Factory Constructor  in Dart — Part  1</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Factory Constructor  in Dart — Part  1</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+In this article, I will help you understand, how we can implement factory design pattern using the factory constructor of dart.
+</section>
+<section data-field="body" class="e-content">
+<section name="a75e" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="0ab4" id="0ab4" class="graf graf--h3 graf--leading graf--title">Factory Constructor in Dart — Part 1</h3><p name="7267" id="7267" class="graf graf--p graf-after--h3">Factory constructor is one of the confusing topics for beginners in dart. To understand it better, one must understand the factory design pattern first.</p><figure name="7690" id="7690" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*-6dwUnjJLiSAnQtqhKucAQ.jpeg" data-width="9376" data-height="4168" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*-6dwUnjJLiSAnQtqhKucAQ.jpeg"><figcaption class="imageCaption">Image src : <a href="https://www.freepik.com/jcomp" data-href="https://www.freepik.com/jcomp" class="markup--anchor markup--figure-anchor" rel="nofollow noopener noopener" target="_blank">https://www.freepik.com/jcomp</a></figcaption></figure><h4 name="e9dd" id="e9dd" class="graf graf--h4 graf-after--figure">What is Factory Design Pattern?</h4><p name="3fa2" id="3fa2" class="graf graf--p graf-after--h4"><strong class="markup--strong markup--p-strong">Definition:</strong><em class="markup--em markup--p-em"> In a Factory pattern, we create objects without exposing the creation logic to the client and refer to newly created objects using a common interface.</em></p><p name="6fbf" id="6fbf" class="graf graf--p graf-after--p">If you’re confused, let me try to explain it via code and the <strong class="markup--strong markup--p-strong">factory </strong>construct.</p><figure name="4103" id="4103" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*KoYgXYImfJqZXQ3ghGTjPQ.png" data-width="637" data-height="381" src="https://cdn-images-1.medium.com/max/800/1*KoYgXYImfJqZXQ3ghGTjPQ.png"></figure><figure name="a506" id="a506" class="graf graf--figure graf--iframe graf-after--figure"><script src="https://gist.github.com/imsaravana369/2185a7dc2af481cec2537b5e7d309374.js"></script></figure><p name="1aac" id="1aac" class="graf graf--p graf-after--figure">If we need to create the object of these subclasses with the following criteria,</p><ol class="postList"><li name="0ff4" id="0ff4" class="graf graf--li graf-after--p">Give <strong class="markup--strong markup--li-strong">Doberman </strong>instance, if the user wants a dog to guard</li><li name="2c33" id="2c33" class="graf graf--li graf-after--li">Give <strong class="markup--strong markup--li-strong">Labrador </strong>instance, otherwise.</li></ol><p name="6605" id="6605" class="graf graf--p graf-after--li">How can we naively do that?</p><figure name="2391" id="2391" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/cb8be566a19676c4c209cd683cbe02b9.js"></script></figure><p name="5055" id="5055" class="graf graf--p graf-after--figure">This is fine in one place, what if you want this logic in multiple places? You have to repeatedly use the if-else statement. How can we simplify this? The answer is <strong class="markup--strong markup--p-strong">factory constructor.</strong></p><figure name="c140" id="c140" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/25a9863c3d352946cb454bb931a330ec.js"></script></figure><p name="c6c6" id="c6c6" class="graf graf--p graf-after--figure">Now we have moved the instance creation logic to the parent class. How can we use the construct?</p><p name="14ba" id="14ba" class="graf graf--p graf-after--p">To create a guard dog, use</p><pre name="7e23" id="7e23" class="graf graf--pre graf-after--p">Dog myGaurdDog = Dog.createDog(name:’Rocky’,gaurdDog:true);</pre><p name="0e79" id="0e79" class="graf graf--p graf-after--pre">Otherwise use,</p><pre name="1870" id="1870" class="graf graf--pre graf-after--p">Dog myPetDog = Dog.createDog(name:’Tommy’,gaurdDog:false);</pre><p name="156a" id="156a" class="graf graf--p graf-after--pre">Now if you look at the factory design pattern definition, it is more understandable</p><ol class="postList"><li name="a449" id="a449" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong"><em class="markup--em markup--li-em">we create objects without exposing the creation logic to the client</em></strong></li></ol><p name="699e" id="699e" class="graf graf--p graf-after--li">yes, we haven’t exposed the object creation logic to the client(<em class="markup--em markup--p-em">main() </em>method), it’s hidden inside our parent class ‘Dog’, the client needs to call the factory constructor with the required parameters to get the needed object.</p><p name="a140" id="a140" class="graf graf--p graf-after--p">2. <strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">We</em> <em class="markup--em markup--p-em">refer to newly created objects using a common interface.</em></strong></p><p name="d4d6" id="d4d6" class="graf graf--p graf-after--p graf--trailing">This is also true, we are returning an instance of Labrador(or Doberman) with type <strong class="markup--strong markup--p-strong">Dog, </strong>not as <strong class="markup--strong markup--p-strong">Labrador(or Doberman).</strong> The parent class is the common interface here as it is compatible with both the sub-classes.</p></div></div></section><section name="7a38" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="ffee" id="ffee" class="graf graf--p graf--leading graf--trailing">I hope, now you understood how the factory constructor makes our life much easier. Implementing a factory design pattern is not the only useful thing of the factory constructor. We can also implement <strong class="markup--strong markup--p-strong">caching </strong>features using the factory constructor. I will discuss ‘<strong class="markup--strong markup--p-strong">caching using factory’</strong> in the next article and the ‘<strong class="markup--strong markup--p-strong">difference between named and factory constructors’</strong> in the subsequent articles. Thank you.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@imsaravananm" class="p-author h-card">Saravanan M</a> on <a href="https://medium.com/p/1bbdf0d0f7f0"><time class="dt-published" datetime="2021-06-25T16:56:58.137Z">June 25, 2021</time></a>.</p><p><a href="https://medium.com/@imsaravananm/factory-constructor-in-dart-part-1-1bbdf0d0f7f0" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on October 7, 2023.</p></footer></article></body></html>

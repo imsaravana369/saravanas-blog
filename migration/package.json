@@ -1,0 +1,25 @@
+{
+  "name": "saravanas-blog",
+  "version": "1.0.0",
+  "description": "A static site generated with Hugo",
+  "main": "migrate-from-medium.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imsaravana369/saravanas-blog.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/imsaravana369/saravanas-blog/issues"
+  },
+  "homepage": "https://github.com/imsaravana369/saravanas-blog#readme",
+  "devDependencies": {
+    "medium-to-markdown": "0.0.3",
+    "puppeteer": "^21.3.8",
+    "rss-parser": "^3.9.0"
+  }
+}

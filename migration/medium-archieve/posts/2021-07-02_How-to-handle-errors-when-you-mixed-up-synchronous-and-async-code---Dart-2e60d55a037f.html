@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>How to handle errors when you mixed up synchronous and async code — Dart</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">How to handle errors when you mixed up synchronous and async code — Dart</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+In this article I will be telling 4 ways I know to handle errors in a code that has both synchronous and asynchronous code mixed up.
+</section>
+<section data-field="body" class="e-content">
+<section name="7457" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="9d60" id="9d60" class="graf graf--h3 graf--leading graf--title">How to handle errors when you mixed up synchronous and async code — Dart</h3><p name="4aef" id="4aef" class="graf graf--p graf-after--h3">Future is one of the most widely used data types in dart. We use them all over the place for returning network responses, for doing heavy computation, or any other asynchronous task.</p><p name="c7cb" id="c7cb" class="graf graf--p graf-after--p">Error handling in synchronous code is done with the <strong class="markup--strong markup--p-strong">try-catch</strong> block and in asynchronous code, we handle errors with the help of <strong class="markup--strong markup--p-strong">catchError()</strong></p><p name="c01e" id="c01e" class="graf graf--p graf-after--p">But what happens when we have mixed up both the synchronous and asynchronous code, how can we handle it? With both try-catch and catchError()? Yes, we can do it in that way, but it will make our code messy in no time.</p><p name="7c95" id="7c95" class="graf graf--p graf-after--p">In this article, I will tell you how we can exactly handle errors raised from those kinds of mixed-up code.</p></div><div class="section-inner sectionLayout--outsetColumn"><figure name="678b" id="678b" class="graf graf--figure graf--layoutOutsetCenter graf-after--p"><img class="graf-image" data-image-id="1*6GbsJphJPydyuvDX_Tvfmg.jpeg" data-width="3335" data-height="2500" data-is-featured="true" src="https://cdn-images-1.medium.com/max/1200/1*6GbsJphJPydyuvDX_Tvfmg.jpeg"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/@universaleye?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" data-href="https://unsplash.com/@universaleye?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">Munro Studio</a> on <a href="https://unsplash.com/s/photos/tangled?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" data-href="https://unsplash.com/s/photos/tangled?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">Unsplash</a></figcaption></figure></div><div class="section-inner sectionLayout--insetColumn"><h4 name="195c" id="195c" class="graf graf--h4 graf-after--figure"><strong class="markup--strong markup--h4-strong">How does a mixed-up code look like?</strong></h4><figure name="0d3c" id="0d3c" class="graf graf--figure graf--iframe graf-after--h4"><script src="https://gist.github.com/imsaravana369/723d36e342999dabecfb2e0641c7c5ac.js"></script></figure><p name="4e54" id="4e54" class="graf graf--p graf-after--figure">If you look at the above code, the function is throwing an error synchronously and also calling a function asynchronously(line 5)</p><p name="caa0" id="caa0" class="graf graf--p graf-after--p">If you try to catch the error with catchError() only, you are going to run into a pitfall very soon now or then.</p><p name="1a98" id="1a98" class="graf graf--p graf-after--p">Let’s look at the main.dart</p><figure name="30ef" id="30ef" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/20d6936e9ecaca8bb51a8ac7ef84aac2.js"></script><figcaption class="imageCaption">The error is not caught😱</figcaption></figure><p name="899e" id="899e" class="graf graf--p graf-after--figure">Look at this short youtube video to understand how the control flows,</p><figure name="1415" id="1415" class="graf graf--figure graf--iframe graf-after--p"><iframe src="https://www.youtube.com/embed/yCLtg62KmF0" width="700" height="393" frameborder="0" scrolling="no"></iframe><figcaption class="imageCaption">I indeed sound funny🤣😥</figcaption></figure><p name="abdb" id="abdb" class="graf graf--p graf-after--figure">Even though we are having catchError(), the error raised from <code class="markup--code markup--p-code"><em class="markup--em markup--p-em">getPersonNameWithId()</em></code><strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em"> </em></strong>is still not caught because the error is <strong class="markup--strong markup--p-strong">thrown from synchronous code</strong> and not from an asynchronous one. We know that catchError() can catch only errors raised from an asynchronous call.</p><h4 name="f987" id="f987" class="graf graf--h4 graf-after--p">How can we deal with that?</h4><h4 name="ac89" id="ac89" class="graf graf--h4 graf-after--h4"><strong class="markup--strong markup--h4-strong">1.Use async keyword (most preferred)</strong></h4><p name="5531" id="5531" class="graf graf--p graf-after--h4">Just use the <strong class="markup--strong markup--p-strong">async</strong> keyword to the function (even it’s not needed) which you feel is mixed up with synchronous and asynchronous code. This will just wrap everything inside the code as an asynchronous call. So all the errors inside it can be handled by catchError().</p><figure name="eecd" id="eecd" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/7e85f6466f2517bd2023f54161f162ec.js"></script><figcaption class="imageCaption">This function doesn’t need to be an “async” function but to handle the synchronous error it’s needed.</figcaption></figure><h4 name="84e3" id="84e3" class="graf graf--h4 graf-after--figure">2. Wrap the code with Future.sync()</h4><p name="9e19" id="9e19" class="graf graf--p graf-after--h4">This works <strong class="markup--strong markup--p-strong">similarly </strong>to using the <strong class="markup--strong markup--p-strong">async </strong>keyword. But I would prefer the async keyword to Future.sync().</p><figure name="62fc" id="62fc" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/0173d61453eb362b2253a88ad6fe0ed6.js"></script><figcaption class="imageCaption">This is an old thing(I think). use async keyword.</figcaption></figure><h4 name="0799" id="0799" class="graf graf--h4 graf-after--figure">3. Use Zones.</h4><p name="468a" id="468a" class="graf graf--p graf-after--h4">According to the <a href="https://api.flutter.dev/flutter/dart-async/Zone-class.html" data-href="https://api.flutter.dev/flutter/dart-async/Zone-class.html" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">docs</a>,</p><blockquote name="d47c" id="d47c" class="graf graf--blockquote graf-after--p">A zone represents an environment that remains stable across asynchronous calls.</blockquote><figure name="e003" id="e003" class="graf graf--figure graf--iframe graf-after--blockquote"><script src="https://gist.github.com/imsaravana369/173a1d8f680b97f2e3a9435ba0306597.js"></script><figcaption class="imageCaption"><strong class="markup--strong markup--figure-strong">Not prevalently used these days</strong></figcaption></figure><p name="0aab" id="0aab" class="graf graf--p graf-after--figure">Usually, a zone is used to catch any <strong class="markup--strong markup--p-strong">unexcepted error</strong>(non-fatal) thrown from the code(that you have no control over, source code of some third party library) and handle it without interrupting the working of other zones.</p><p name="45fa" id="45fa" class="graf graf--p graf-after--p">Future uses zones behind the hood, we don’t always explicitly use zones, I have given this example to let you know that we can also handle async errors using Zones.</p><h4 name="8e08" id="8e08" class="graf graf--h4 graf-after--p"><strong class="markup--strong markup--h4-strong">4. Use await and try-catch block</strong></h4><p name="45d1" id="45d1" class="graf graf--p graf-after--h4">If you want your code to be blocking(synchronous), then you can use await and put that inside a try-catch block to handle those errors.</p><figure name="0bbc" id="0bbc" class="graf graf--figure graf--iframe graf-after--p graf--trailing"><script src="https://gist.github.com/imsaravana369/cd846a973103d64984aa010f08e01b17.js"></script></figure></div></div></section><section name="fcd3" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="5a03" id="5a03" class="graf graf--p graf--leading graf--trailing">We can avoid unhandled errors in synchronous and asynchronous codes easily by just coding <strong class="markup--strong markup--p-strong">consciously</strong>(this one is hard) and by clearly understanding how futures and asynchronous functions work. I just wanted to share what happened when I mixed up both my synchronous and asynchronous code and how I rectified it. Thank you for reading this article, hope you have gained some insights on this topic.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@imsaravananm" class="p-author h-card">Saravanan M</a> on <a href="https://medium.com/p/2e60d55a037f"><time class="dt-published" datetime="2021-07-02T09:32:43.112Z">July 2, 2021</time></a>.</p><p><a href="https://medium.com/@imsaravananm/how-to-handle-errors-when-you-mixed-up-synchronous-and-async-code-dart-2e60d55a037f" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on October 7, 2023.</p></footer></article></body></html>

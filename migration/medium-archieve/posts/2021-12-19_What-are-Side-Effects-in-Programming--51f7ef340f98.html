@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>What are Side-Effects in Programming?</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">What are Side-Effects in Programming?</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Understanding what side effects mean in the functional world.
+</section>
+<section data-field="body" class="e-content">
+<section name="751b" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="83fb" id="83fb" class="graf graf--h3 graf--leading graf--title">What are Side-Effects in Programming?</h3><p name="3047" id="3047" class="graf graf--p graf-after--h3">If you’ve started learning functional programming chances are high that you often come across the term side effects. But have you ever wondered what that term actually means? I will try to demystify what it actually means in this article.</p><figure name="1183" id="1183" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*9PM_GiCwNJ1WLKosUuf2nw.jpeg" data-width="509" data-height="339" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*9PM_GiCwNJ1WLKosUuf2nw.jpeg"><figcaption class="imageCaption">Photos by <a href="https://www.istockphoto.com/portfolio/SPmemory?mediatype=photography" data-href="https://www.istockphoto.com/portfolio/SPmemory?mediatype=photography" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">Spmemory</a> on <a href="https://www.istockphoto.com/" data-href="https://www.istockphoto.com/" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">istock</a></figcaption></figure><h4 name="d0e8" id="d0e8" class="graf graf--h4 graf-after--figure">Side-Effects</h4><p name="5d80" id="5d80" class="graf graf--p graf-after--h4">A function is said to have a side-effect when the function changes a non-local state or when its output is not deterministic.</p><p name="82d0" id="82d0" class="graf graf--p graf-after--p">A function as we know has its own scope, it’s safe if we mutate variables within its scope. We call them side-effects when it <strong class="markup--strong markup--p-strong">uses or changes </strong>stuff outside its scope like a variable passed by reference, global variable, reading user input from the console, logging to console, doing database operations, etc.</p><h4 name="5876" id="5876" class="graf graf--h4 graf-after--p">1. Mutating Non-Local State</h4><figure name="5759" id="5759" class="graf graf--figure graf--iframe graf-after--h4"><script src="https://gist.github.com/imsaravana369/285165a4ac05159d1faa8a55df9929f1.js"></script></figure><p name="3a10" id="3a10" class="graf graf--p graf-after--figure">The <em class="markup--em markup--p-em">no_of_adds</em> global variable here is acting like a counter to keep track of how many times the add function is called.</p><h4 name="96dc" id="96dc" class="graf graf--h4 graf-after--p">2. Reading non-local state</h4><figure name="fb9d" id="fb9d" class="graf graf--figure graf--iframe graf-after--h4 graf--trailing"><script src="https://gist.github.com/imsaravana369/3900baff15ad0a4596ad4688261a0fcc.js"></script></figure></div></div></section><section name="5adc" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="7f92" id="7f92" class="graf graf--p graf--leading">Global states don’t only necessarily be global variables, it can be anything. It can be a file in your disk, a remote database, your console screen, etc.</p><p name="68a6" id="68a6" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">YES, Database writes, printing to console, etc</strong> are also considered as side-effects because they are mutating something in the outside world. If you are trying to write something to your remote database, it depends not only on the arguments that you pass but on many factors like internet connection, the permission you have, whether the table exists, etc <strong class="markup--strong markup--p-strong">which is non-deterministic</strong>.</p><p name="ce72" id="ce72" class="graf graf--p graf-after--p">In the case of printing to console, the console belongs to your OS so writing to a console is considered as mutating a global state.</p><figure name="3eb1" id="3eb1" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/9a3e0d18012f6c1a72a7a3379c1972c0.js"></script></figure><blockquote name="4f36" id="4f36" class="graf graf--pullquote graf-after--figure">You may try to do something like<br>&gt;&gt;&gt;writeToDb(“person_table”, {‘name’: ‘Thanos’, ‘age’: 1001})</blockquote><ul class="postList"><li name="954e" id="954e" class="graf graf--li graf-after--pullquote">The first time, it fails due to the fact you don’t have write-permission to the <em class="markup--em markup--li-em">person_table</em>.</li><li name="9599" id="9599" class="graf graf--li graf-after--li">You set the permission now and you can successfully write to the table.</li><li name="9164" id="9164" class="graf graf--li graf-after--li">Now assume you are passing the same arguments, now this time it fails because you have violated an integrity constraint. i.e name is a primary key and Thanos already exists (you added it 😂)</li><li name="de0c" id="de0c" class="graf graf--li graf-after--li graf--trailing">Now as you can see, the result not only depends on the arguments passed but also the history &amp; outside context which <strong class="markup--strong markup--li-strong">may or may not be in our control.</strong></li></ul></div></div></section><section name="ff05" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="000f" id="000f" class="graf graf--p graf--leading">Programs with side effects become really hard to debug as our program’s behavior becomes non-deterministic. That’s why people prefer writing pure functions ( Functions without side effects) but it’s literally <strong class="markup--strong markup--p-strong">impossible </strong>to write real-world applications without any side effects.</p><h4 name="2425" id="2425" class="graf graf--h4 graf-after--p">How to Handle Side Effects?</h4><ol class="postList"><li name="d67d" id="d67d" class="graf graf--li graf-after--h4">Try to separate pure functions from impure functions. So that you can mock impure functions when testing.</li></ol><figure name="492d" id="492d" class="graf graf--figure graf--iframe graf-after--li"><script src="https://gist.github.com/imsaravana369/8a4aa4cb1335adb0356e95429a8cf650.js"></script><figcaption class="imageCaption">we can mock getAge() function while testing.</figcaption></figure><p name="40fb" id="40fb" class="graf graf--p graf-after--figure">2. The golden principle used by many functional programming like Haskell, Purescript, etc is <strong class="markup--strong markup--p-strong">“Make side-effects explicit”</strong> The function signature itself tells that it has side effects. For e.g, Consider the getLine function signature in Haskell which is used to get input from the user.</p><pre name="f718" id="f718" class="graf graf--pre graf-after--p">getLine :: IO String</pre><p name="1212" id="1212" class="graf graf--p graf-after--pre graf--trailing">Here we are explicitly telling in the method signature itself that the function is going to do an IO operation. So whichever function that’s using the getLine() must also be aware of it.</p></div></div></section><section name="c6a8" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="dc32" id="dc32" class="graf graf--p graf--leading">In a nutshell, a function is said to have side effects when it depends on or modifies a state outside its scope. Even though it is not possible to write real-world applications without side effects we must handle them with care to avoid hours of debugging or if possible use a functional programming language that makes programmers be more disciplined in handling side effects. It’s hard for a programmer to be always disciplined as we got deadlines😵‍💫, so opt for FP when possible.</p><p name="5bce" id="5bce" class="graf graf--p graf-after--p graf--trailing">Thank you very much for reading. Clap👏 if you’ve liked the article, share your thoughts in the comment section.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@imsaravananm" class="p-author h-card">Saravanan M</a> on <a href="https://medium.com/p/51f7ef340f98"><time class="dt-published" datetime="2021-12-19T17:54:11.318Z">December 19, 2021</time></a>.</p><p><a href="https://medium.com/@imsaravananm/what-are-side-effects-in-programming-51f7ef340f98" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on October 7, 2023.</p></footer></article></body></html>

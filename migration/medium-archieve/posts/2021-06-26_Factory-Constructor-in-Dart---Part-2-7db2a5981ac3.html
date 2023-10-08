@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Factory Constructor in Dart — Part 2</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Factory Constructor in Dart — Part 2</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+In this article, I will tell you how we can use factory constructor to cache instances and make our program more optimized.
+</section>
+<section data-field="body" class="e-content">
+<section name="ee81" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="6d1f" id="6d1f" class="graf graf--h3 graf--leading graf--title">Factory Constructor in Dart — Part 2</h3><p name="07b5" id="07b5" class="graf graf--p graf-after--h3">In the <a href="https://imsaravananm.medium.com/factory-constructor-in-dart-part-1-1bbdf0d0f7f0" data-href="https://imsaravananm.medium.com/factory-constructor-in-dart-part-1-1bbdf0d0f7f0" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">previous article</a>, we have discussed how we can implement a simple factory design pattern using a factory constructor. Yet we haven’t fully explored and understood the power of factory constructors. In this article, we are going to learn how we can implement caching using factory constructors.</p><figure name="a18c" id="a18c" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*-6dwUnjJLiSAnQtqhKucAQ.jpeg" data-width="9376" data-height="4168" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*-6dwUnjJLiSAnQtqhKucAQ.jpeg"></figure><p name="7531" id="7531" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">What is Caching?</strong></p><p name="d481" id="d481" class="graf graf--p graf-after--p">Caching is a method of storing data in local storage so that we can reuse it instead of doing the same computation again.</p><p name="6246" id="6246" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Example</strong>: <em class="markup--em markup--p-em">Your Facebook profile picture is cached in your mobile’s local storage so that it doesn’t need to be fetched from the internet all the time.</em></p><p name="05f2" id="05f2" class="graf graf--p graf-after--p">But the caching we are going to do with factory constructors in this article is quite different. We are going to cache instances inside a map.</p><p name="3890" id="3890" class="graf graf--p graf-after--p">The best example I can give for caching is <strong class="markup--strong markup--p-strong">caching of different Loggers</strong>, if you don’t know what a logger does, it is used to print messages to the console for debugging purposes. We usually have a logger for each class to print their own debugging messages preceded with their class name(so that we can identify “which message belong to which class”)</p><p name="241c" id="241c" class="graf graf--p graf-after--p">Let’s say we have implemented our own simple Logger class</p><figure name="8f11" id="8f11" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/f4dd25e4bf5dd22616c163f6b28cd46f.js"></script></figure><p name="64c3" id="64c3" class="graf graf--p graf-after--figure">This Logger class is very obvious, it has only one attribute <strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">name </em></strong>and only one method <strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">void log(String msg)</em></strong>. we will create an instance of the logger for each class by passing its class name as the parameter. But if you are creating the same instance every time(from scratch) for the same class, it’s not a good practice and also when the instance is very expensive it will cost a lot of computational time.</p><p name="270c" id="270c" class="graf graf--p graf-after--p">Example Scenario,</p><pre name="2aac" id="2aac" class="graf graf--pre graf-after--p">class A{<br> late final Logger _logger;<br> A(){<br>    _logger = Logger(‘A’);<br> }<br>}</pre><p name="9b58" id="9b58" class="graf graf--p graf-after--pre">In the main() method, let’s do create 5 instances of A,</p><pre name="ed4b" id="ed4b" class="graf graf--pre graf-after--p">main() {<br>   for(int i=1;i&lt;=5;i++){<br>       print(&quot;Creating instance ${i}&quot;);<br>       A a = A();<br>       print(&quot;&quot;); //newline<br>   }<br>}</pre><p name="fddd" id="fddd" class="graf graf--p graf-after--pre">The output will be</p><figure name="2492" id="2492" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*kxDE9zVrAfSAnJHRsVnLTg.png" data-width="533" data-height="576" src="https://cdn-images-1.medium.com/max/800/1*kxDE9zVrAfSAnJHRsVnLTg.png"></figure><p name="32de" id="32de" class="graf graf--p graf-after--figure">Whenever you create an instance of A, a corresponding logger instance will also be created. Is there any way we can reuse the logger instance? Yes, we have, by caching we can achieve that.</p><h4 name="fa79" id="fa79" class="graf graf--h4 graf-after--p">Logger class with caching enabled</h4><figure name="30d1" id="30d1" class="graf graf--figure graf--iframe graf-after--h4"><script src="https://gist.github.com/imsaravana369/87b2d0ebd97d89c8adb61e45e5766e07.js"></script></figure><blockquote name="0e0e" id="0e0e" class="graf graf--blockquote graf-after--figure"><strong class="markup--strong markup--blockquote-strong">Note</strong>: Factory constructors have no access to <code class="markup--code markup--blockquote-code">this</code>. That’s why we have declared _cache as <strong class="markup--strong markup--blockquote-strong">static.</strong></blockquote><p name="8871" id="8871" class="graf graf--p graf-after--blockquote">If you look at this new logger class, I have made some noticeable changes.</p><ol class="postList"><li name="81f5" id="81f5" class="graf graf--li graf-after--p">Removed the public constructor and added a private constructor Logger._internal(), so that we can’t directly create an instance of the Logger class anymore.</li><li name="f1ee" id="f1ee" class="graf graf--li graf-after--li">Introduced a Map ‘<strong class="markup--strong markup--li-strong"><em class="markup--em markup--li-em">_cache</em></strong>’ that is used for storing the previously created instances with their class name as the key.</li><li name="3105" id="3105" class="graf graf--li graf-after--li">Added a factory constructor, that will decide whether to return a new instance or an already existing one.</li></ol><p name="25f0" id="25f0" class="graf graf--p graf-after--li">If you run the main() method again, our output will be</p><figure name="97b3" id="97b3" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*edudw3r-VExQaBnW7iS-Kg.png" data-width="447" data-height="481" src="https://cdn-images-1.medium.com/max/800/1*edudw3r-VExQaBnW7iS-Kg.png"></figure><p name="c10c" id="c10c" class="graf graf--p graf-after--figure">As you can see the logger instance is created only for the first time when we initialize A, then it is reused for the subsequent instantiation.</p><h4 name="1a09" id="1a09" class="graf graf--h4 graf-after--p">How does it work?</h4><ol class="postList"><li name="58dc" id="58dc" class="graf graf--li graf-after--h4">When you first create the instance of A, it will ask the factory constructor of Logger to give it an instance of Logger with the name ‘A’.</li><li name="f7ea" id="f7ea" class="graf graf--li graf-after--li">The factory constructor will look for a Logger instance with key ‘A’ in the _cache map. Since it is the first time, it can’t find any Logger with key ‘A’. So it creates a new instance of Logger with the name as ‘A’, stores it in the map with key as ‘A’, and returns the same.</li><li name="b661" id="b661" class="graf graf--li graf-after--li">For the subsequent calls, since the Logger with key ‘A’ is already existing in the cache, it will not create a new instance and return the cached instance.</li></ol><p name="b89b" id="b89b" class="graf graf--p graf-after--li">This caching technique comes in very handy if the instance we need to create is very expensive(takes a lot of computational time).</p><p name="3237" id="3237" class="graf graf--p graf-after--p">You can argue that the cache itself may occupy a lot of space. Yes, you are right but there are various caching algorithms we can use to overcome this problem but if you are having only a few instances to cache, this will do.</p><p name="ace0" id="ace0" class="graf graf--p graf-after--p graf--trailing">In the next article, I will tell you the difference between a named constructor and a factory constructor, and when to prefer one over the other. Thank you.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@imsaravananm" class="p-author h-card">Saravanan M</a> on <a href="https://medium.com/p/7db2a5981ac3"><time class="dt-published" datetime="2021-06-26T18:45:12.997Z">June 26, 2021</time></a>.</p><p><a href="https://medium.com/@imsaravananm/factory-constructor-in-dart-part-2-7db2a5981ac3" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on October 7, 2023.</p></footer></article></body></html>

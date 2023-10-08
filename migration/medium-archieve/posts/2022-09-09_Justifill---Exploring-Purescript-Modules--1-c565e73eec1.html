@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Justifill — Exploring Purescript Modules #1</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Justifill — Exploring Purescript Modules #1</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+I’m fed up with writing `Nothing` everywhere. Let’s skip it from today.
+</section>
+<section data-field="body" class="e-content">
+<section name="b776" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="c73c" id="c73c" class="graf graf--h3 graf--leading graf--title">Justifill — Exploring Purescript Modules #1</h3><p name="c025" id="c025" class="graf graf--p graf-after--h3">I have decided to start writing about Purescript modules which I find interesting and this is the first article in the series <strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">#exploring-ps-modules</em></strong>.</p><p name="7dbb" id="7dbb" class="graf graf--p graf-after--p">Our frontend team works extensively on Purescript and our application does a lot of api calls, and most of the fields in the request payload are optional and you can find <code class="markup--code markup--p-code">Maybe</code>fields all over the place. Maybe fields are good, they let us ignore fields which are not mandatory by passing <code class="markup--code markup--p-code">Nothing</code> but let’s say you have 10 fields and out of them 8 are <code class="markup--code markup--p-code">Maybe</code> fields, there are times you want to pass <code class="markup--code markup--p-code">Nothing</code> to all the 8 fields. *sighs!!*</p><p name="d9a1" id="d9a1" class="graf graf--p graf-after--p">This made us think, can we just pass the fields that are necessary and all the Maybe fields which are not passed are set to <code class="markup--code markup--p-code">Nothing</code> by default, in a type safe way and not giving a chance to the compiler to complain.</p><figure name="ddab" id="ddab" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*LOrkwh35A5vxwe4NhrsfnA.jpeg" data-width="2400" data-height="1600" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*LOrkwh35A5vxwe4NhrsfnA.jpeg"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/es/@lacarta?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" data-href="https://unsplash.com/es/@lacarta?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">Santiago Lacarta</a> on <a href="https://unsplash.com/s/photos/fill?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" data-href="https://unsplash.com/s/photos/fill?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">Unsplash</a></figcaption></figure><p name="c5cd" id="c5cd" class="graf graf--p graf-after--figure">Thats when we found the package named <code class="markup--code markup--p-code"><a href="https://pursuit.purescript.org/packages/purescript-justifill/0.5.0/docs/Justifill#v:justifill" data-href="https://pursuit.purescript.org/packages/purescript-justifill/0.5.0/docs/Justifill#v:justifill" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">JustiFill</a></code> which let us do exactly what we wanted to do.</p><p name="af8e" id="af8e" class="graf graf--p graf-after--p"><em class="markup--em markup--p-em">Quick Example</em>,</p><pre name="5c71" id="5c71" class="graf graf--pre graf-after--p">type Person = { name :: String<br>              , age :: Int<br>              , salary :: Maybe Int<br>              , children :: Maybe Int<br>              }</pre><pre name="17df" id="17df" class="graf graf--pre graf-after--pre">student :: Person<br>student = justifill {name : &quot;Mike&quot;, age : 14}</pre><pre name="0e41" id="0e41" class="graf graf--pre graf-after--pre">--- &gt; student <br>--- &gt; { age: 14, name: &quot;Mike&quot;, salary: Nothing, children: Nothing }</pre><p name="8524" id="8524" class="graf graf--p graf-after--pre">You can see from the above example that we are only passing the mandatory fields to the function <code class="markup--code markup--p-code">justifill</code> and it fills the maybe fields with <code class="markup--code markup--p-code">Nothing</code> for us. See, how useful this could be!!</p><p name="fe04" id="fe04" class="graf graf--p graf-after--p">And there are also times when we want to pass <strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">some maybe fields</em></strong> along with the mandatory fields, can we do that with this library? Absolutely yes.</p><pre name="ec4e" id="ec4e" class="graf graf--pre graf-after--p">freshGrad :: Person<br>freshGrad = justifill { name : &quot;Steve&quot;<br>                      , age : 21<br>                      , salary: Just 200<br>                      --  see i&#39;m skipping the `children` field<br>                      }</pre><p name="09cf" id="09cf" class="graf graf--p graf-after--pre">It also allows us to fill Maybe fields without using the <code class="markup--code markup--p-code">Just</code> constructor.</p><pre name="bafb" id="bafb" class="graf graf--pre graf-after--p">familyMan :: Person<br>familyMan = justifill { name : &quot;Jim&quot;<br>                      , age : 21<br>                      , salary: Just 2000<br>                      , children : 1 -- we skipped Just <br>                      }</pre><p name="5a6b" id="5a6b" class="graf graf--p graf-after--pre graf--trailing">This Library is so helpful in making your code much cleaner by reducing lot of boiler plate code.</p></div></div></section><section name="faca" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="73f5" id="73f5" class="graf graf--p graf--leading graf--trailing">Hope you will also starting using this in your project and share🗣 this article with your colleagues if you also find the library interesting.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@imsaravananm" class="p-author h-card">Saravanan M</a> on <a href="https://medium.com/p/c565e73eec1"><time class="dt-published" datetime="2022-09-09T17:15:20.476Z">September 9, 2022</time></a>.</p><p><a href="https://medium.com/@imsaravananm/justifill-exploring-purescript-modules-1-c565e73eec1" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on October 7, 2023.</p></footer></article></body></html>

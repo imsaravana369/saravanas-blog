@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>EffectFnAff — Let’s create Async Foreign Functions in purescript — Exploring purescript-modules #3</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">EffectFnAff — Let’s create Async Foreign Functions in purescript — Exploring purescript-modules #3</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Let’s learn how to create a bridge between async Javascript and Purescript.
+</section>
+<section data-field="body" class="e-content">
+<section name="d2dd" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="376b" id="376b" class="graf graf--h3 graf--leading graf--title">EffectFnAff — Let’s create Async Foreign Functions in purescript — Exploring purescript-modules #3</h3><p name="cf1e" id="cf1e" class="graf graf--p graf-after--h3">This is my third article in the series <strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">#exploring-ps-modules. </em></strong>In this article we will be exploring a very cool purescript module.</p><p name="b293" id="b293" class="graf graf--p graf-after--p">Let’s accept it, we can’t do all the things with purescript alone sometimes we need the help of javascript, for that purpose we use FFI(Foreign Function Interface) which enables communication from PureScript code to JavaScript code, and vice versa.</p><figure name="374e" id="374e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*q0Im08fqayc_H6tDtdu5sQ.jpeg" data-width="2400" data-height="1600" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*q0Im08fqayc_H6tDtdu5sQ.jpeg"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/@adriencesard?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" data-href="https://unsplash.com/@adriencesard?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">Adrien CÉSARD</a> on <a href="https://unsplash.com/s/photos/bridge?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" data-href="https://unsplash.com/s/photos/bridge?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">Unsplash</a></figcaption></figure><p name="10bf" id="10bf" class="graf graf--p graf-after--figure">Let’s say you want to implement <code class="markup--code markup--p-code">Euclidean algorithm</code> for finding GCD of two numbers, but you don’t want to write it in purescript so you create the function in JS.</p><pre name="1b58" id="1b58" class="graf graf--pre graf-after--p">//example.js</pre><pre name="badc" id="badc" class="graf graf--pre graf-after--pre">exports[&quot;gcd&quot;] = function (a){<br>  return function(b){<br>        //..... <br>        return result;<br>    }<br>}</pre><p name="c94f" id="c94f" class="graf graf--p graf-after--pre">Then we foreign import it from purescript side</p><pre name="2eaa" id="2eaa" class="graf graf--pre graf-after--p">//example.purs<br>foreign import gcd :: Int -&gt; Int -&gt; Int </pre><p name="4840" id="4840" class="graf graf--p graf-after--pre">This is quite straight forward. But have you tried foreign importing a async function?</p><pre name="b9b0" id="b9b0" class="graf graf--pre graf-after--p">foreign import myAsyncGCDFunction :: Int -&gt; Int -&gt; Aff Int</pre><p name="f8fb" id="f8fb" class="graf graf--p graf-after--pre">Can we use <code class="markup--code markup--p-code">Aff</code>as the return type for foreign imports?</p><p name="085a" id="085a" class="graf graf--p graf-after--p">No we can’t do that. Why? Because Aff is a complex purescript data structure it’s not just a plain function that we can return from JS.</p><p name="3dd6" id="3dd6" class="graf graf--p graf-after--p">For these kind of use cases we have a special type called <code class="markup--code markup--p-code">EffectFnAff</code> which will let us create a purescript interface for async javascript functions.</p><p name="0f30" id="0f30" class="graf graf--p graf-after--p">For demonstration purpose, we will create a async function <code class="markup--code markup--p-code">addWithDelay</code> that will take two integers and return the result after 1 second.</p><pre name="a936" id="a936" class="graf graf--pre graf-after--p">function adddWithDelay(a,b) {<br>   return new Promise((resolve, reject) =&gt; {<br>           setTimeout(() =&gt; resolve(a+b) , 1000);<br>          });<br>}</pre><blockquote name="6b2c" id="6b2c" class="graf graf--blockquote graf-after--pre"><strong class="markup--strong markup--blockquote-strong">Note:</strong> I’m not importing this function</blockquote><p name="a47f" id="a47f" class="graf graf--p graf-after--blockquote">How can we convert this to a foreign function that is compatible with purescript?</p><figure name="21c6" id="21c6" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/27a6853ac2cc8aeaf08cf6a8cf823742.js"></script></figure><p name="77ad" id="77ad" class="graf graf--p graf-after--figure">Okay, let’s understand the above function by dissecting it piece by piece.</p><p name="4707" id="4707" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Line 4:</strong> <code class="markup--code markup--p-code">EffectFnAff</code> will give us two callbacks <code class="markup--code markup--p-code">onError</code> &amp; <code class="markup--code markup--p-code">onSuccess.</code> One can be called with an error, the other can be called with the actual value that our function has to return.</p><p name="3bcf" id="3bcf" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Line 8: </strong>We are calling <code class="markup--code markup--p-code">onSuccess</code> with the result of the promise that is <code class="markup--code markup--p-code">r</code></p><p name="50cf" id="50cf" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Line 10:</strong> EffectFnAff needs to return a canceller which is just a function that takes 3 arguments, the first one being the <code class="markup--code markup--p-code">error</code> that is responsible for triggering the canceller, the second argument is a function that will get called if we can’t cancel the operation, the third one is a function which we have to call when we are done with cancelling the async operation (like clearing resource, closing db connection etc).</p><p name="8aee" id="8aee" class="graf graf--p graf-after--p">In the above example, we are not handling any cancellation errors we are directly calling <code class="markup--code markup--p-code">onCancelerSuccess()</code> to tell that we have cancelled the operation successfully.</p><p name="7445" id="7445" class="graf graf--p graf-after--p">Now that we understood how to write <code class="markup--code markup--p-code">EffectFnAff</code> from JS side, let’s create an interface from purescript side so that we could make use of it.</p><pre name="3fa9" id="3fa9" class="graf graf--pre graf-after--p">foreign import addWithDelay_ :: Int -&gt; Int -&gt; EffectFnAff Int</pre><p name="6e53" id="6e53" class="graf graf--p graf-after--pre">Having foreign imported the function, we have to write another purescript interface that could convert this “not of any use” <code class="markup--code markup--p-code">EffectFnAff</code> to <code class="markup--code markup--p-code">Aff.</code> If you are searching on <a href="https://pursuit.purescript.org/packages/purescript-aff/7.1.0/docs/Effect.Aff.Compat#v:fromEffectFnAff" data-href="https://pursuit.purescript.org/packages/purescript-aff/7.1.0/docs/Effect.Aff.Compat#v:fromEffectFnAff" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">pursuit</a> for a function that converts <code class="markup--code markup--p-code">EffectFnAff -&gt; Aff</code> then you will find a function named <code class="markup--code markup--p-code">fromEffectFnAff</code></p><pre name="259c" id="259c" class="graf graf--pre graf-after--p">addWithDelay :: Int -&gt; Int -&gt; Aff Int<br>addWithDelay a b = fromEffectFnAff $ addWithDelay_ a b</pre><p name="06bb" id="06bb" class="graf graf--p graf-after--pre graf--trailing">Yes, my friend, thats all it takes to convert your beautiful async function to an <code class="markup--code markup--p-code">Aff</code> which you can use from purescript side.</p></div></div></section><section name="524b" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h4 name="3497" id="3497" class="graf graf--h4 graf--leading"><strong class="markup--strong markup--h4-strong">Bonus</strong></h4><p name="5e68" id="5e68" class="graf graf--p graf-after--h4">If you are interested to see how the canceller of <code class="markup--code markup--p-code">EffectFnAff</code> works, just kill the <code class="markup--code markup--p-code">Aff</code> that will call the canceller automatically.</p><figure name="1b7c" id="1b7c" class="graf graf--figure graf--iframe graf-after--p graf--trailing"><script src="https://gist.github.com/imsaravana369/cf5e7a9e9533fb68701ad35492e1fb8e.js"></script></figure></div></div></section><section name="458c" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="3cdb" id="3cdb" class="graf graf--p graf--leading">Hope you’ve liked the article and learnt how we can make a bridge between async Javascript and Purescript.</p><p name="ca5f" id="ca5f" class="graf graf--p graf-after--p graf--trailing">Clap 👏 if you’ve liked this article and share it with your friends to spread the knowledge. Let’s make Purescript popular💪.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@imsaravananm" class="p-author h-card">Saravanan M</a> on <a href="https://medium.com/p/b0e168547851"><time class="dt-published" datetime="2022-10-05T03:49:59.141Z">October 5, 2022</time></a>.</p><p><a href="https://medium.com/@imsaravananm/effectfnaff-lets-create-async-foreign-functions-in-purescript-exploring-purescript-modules-3-b0e168547851" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on October 7, 2023.</p></footer></article></body></html>

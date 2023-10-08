@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>DefaultValues- Create Default Values Out of Thin Air — Exploring-purescript-modules #4</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">DefaultValues- Create Default Values Out of Thin Air — Exploring-purescript-modules #4</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+No need to create dummy place holder values, let’s pull it out of thin air by using this magic function.
+</section>
+<section data-field="body" class="e-content">
+<section name="a00e" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="c665" id="c665" class="graf graf--h3 graf--leading graf--title">DefaultValues- Create Default Values Out of Thin Air — Exploring-purescript-modules #4</h3><p name="fc8a" id="fc8a" class="graf graf--p graf-after--h3">Have you ever been in a place where you wanted to create placeholder values, like for a big record, so you have created a variable that holds the dummy value and used it for <code class="markup--code markup--p-code">fromMaybe</code> or decode failure etc ?</p><p name="c322" id="c322" class="graf graf--p graf-after--p">E.g, let’s suppose you have a record which holds a person’s Info,</p><pre name="5b7e" id="5b7e" class="graf graf--pre graf-after--p">type Person = <br>      { name :: String<br>      , age :: Int <br>      , height :: Number <br>      , ....<br>      }</pre><p name="8465" id="8465" class="graf graf--p graf-after--pre">Let’s say you want to create an initial state for your form component where all the above details will be filled, what the initial state would be?</p><pre name="016e" id="016e" class="graf graf--pre graf-after--p">initialState :: Person<br>initialState = <br>      { name : &quot;&quot;<br>      , age : 0<br>      , height : 0.0<br>      , ....<br>      }</pre><blockquote name="4c11" id="4c11" class="graf graf--blockquote graf-after--pre"><em class="markup--em markup--blockquote-em">Note: Ideally they should be wrapped in Maybe type, but please bear with me for explanation purpose.</em></blockquote><p name="9c18" id="9c18" class="graf graf--p graf-after--blockquote">We can create a record with dummy/placeholder values with some 5–10 fields but what if the number of fields exceeds 10 or 20 or more. Do we have to write these boilerplate code to create the dummy values? Wouldn’t be better if some package just give us values filled with default values? Won’t it save lot of developer’s time?</p><p name="d73e" id="d73e" class="graf graf--p graf-after--p">Is there any package that does this? Yes, there is a package called <a href="https://pursuit.purescript.org/packages/purescript-default-values/1.0.1" data-href="https://pursuit.purescript.org/packages/purescript-default-values/1.0.1" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--p-strong">purescript-default-values</strong></a> which exactly does this job of creating default values. We will explore on how to use that package in this article.</p><figure name="a556" id="a556" class="graf graf--figure graf-after--p graf--trailing"><img class="graf-image" data-image-id="1*_Co1l-6P_kyTdRC3ybiJ2Q.jpeg" data-width="2400" data-height="1600" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*_Co1l-6P_kyTdRC3ybiJ2Q.jpeg"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/@jhaland?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" data-href="https://unsplash.com/@jhaland?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">Jørgen Håland</a> on <a href="https://unsplash.com/s/photos/twins?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" data-href="https://unsplash.com/s/photos/twins?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">Unsplash</a></figcaption></figure></div></div></section><section name="e0d0" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="d951" id="d951" class="graf graf--p graf--leading">It’s a very simple module, that has a type class called <code class="markup--code markup--p-code">DefaultValue</code> which has a single method called <code class="markup--code markup--p-code">defaultValue</code> , calling this particular method will provide us with the defaultValue for that particular type.</p><pre name="9499" id="9499" class="graf graf--pre graf-after--p">myDefaultInt :: Int<br>myDefaultInt = defaultValue </pre><pre name="6721" id="6721" class="graf graf--pre graf-after--pre">myDefaultString :: String<br>myDefaultString = defaultValue</pre><pre name="1b33" id="1b33" class="graf graf--pre graf-after--pre">&gt;&gt;&gt; myDefaultInt<br>&gt;&gt;&gt; 0</pre><pre name="15ba" id="15ba" class="graf graf--pre graf-after--pre">&gt;&gt;&gt; myDefaultString<br>&gt;&gt;&gt; &quot;&quot;</pre><p name="061c" id="061c" class="graf graf--p graf-after--pre">Now let’s suppose you have a <code class="markup--code markup--p-code">Maybe Int</code> value and you are using fromMaybe to get the actual Integer from the Maybe wrapper. Most probably we would be giving 0 as a fallback in case of Nothing, instead of hardcoding <code class="markup--code markup--p-code">0</code> we could do it as follows,</p><pre name="44a4" id="44a4" class="graf graf--pre graf-after--p">&gt;&gt;&gt; fromMaybe defaultValue (Just 100)<br>&gt;&gt;&gt; 100</pre><pre name="0228" id="0228" class="graf graf--pre graf-after--pre">&gt;&gt;&gt; fromMaybe defaultValue (Nothing :: Maybe Int)<br>&gt;&gt;&gt; 0</pre><p name="f9eb" id="f9eb" class="graf graf--p graf-after--pre"><em class="markup--em markup--p-em">Note: If you are using repl, type Annotating </em><code class="markup--code markup--p-code"><em class="markup--em markup--p-em">Nothing</em></code><em class="markup--em markup--p-em"> is needed, otherwise compiler can’t infer the type.</em></p><p name="6a94" id="6a94" class="graf graf--p graf-after--p">Providing default values are not much of a hassle when it comes to primitive types like Int, String, Number etc. But this package really shines when working with insanely nested and big records.</p><pre name="2d82" id="2d82" class="graf graf--pre graf-after--p">type PersonInfo = <br>      { name :: String<br>      , age :: Int <br>      , height :: Number<br>      , father :: Person <br>      , mother :: Person<br>      , degrees :: Array String<br>      , address : <br>            { city :: String<br>            , pincode :: Int<br>            , street : <br>                 { line1 :: String  <br>                 , line2 :: String<br>                 , ....<br>                 }<br>            }<br>      , ..... <br>      }</pre><p name="2a1e" id="2a1e" class="graf graf--p graf-after--pre">If you are trying to decode a <code class="markup--code markup--p-code">foreign</code> to the above type most probably you will be using <code class="markup--code markup--p-code"><a href="https://pursuit.purescript.org/packages/purescript-foreign-generic/10.0.0/docs/Foreign.Generic.Class#v:decode" data-href="https://pursuit.purescript.org/packages/purescript-foreign-generic/10.0.0/docs/Foreign.Generic.Class#v:decode" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">decode</a></code> . What if you want to return the value for the above type no matter what, do you have to create a dummy record with all the fields filled with empty values in case of failure? Absolutely no, you can just use <code class="markup--code markup--p-code">defaultValue</code></p><pre name="7cbe" id="7cbe" class="graf graf--pre graf-after--p">decodePerson :: Foreign -&gt; PersonInfo<br>decodePerson fgn = case decode fgn of <br>               Right person -&gt; person <br>               Left _ -&gt; defaultValue</pre><p name="f678" id="f678" class="graf graf--p graf-after--pre">When the decode fails, <code class="markup--code markup--p-code">defaultValue</code> will provide you with the record where all the fields are filled with dummy values.</p><p name="a54d" id="a54d" class="graf graf--p graf-after--p">But what if you want to provide default value to custom created types ?</p><pre name="b252" id="b252" class="graf graf--pre graf-after--p">data Color = RED <br>           | YELLOW<br>           | GREEN</pre><p name="c9e3" id="c9e3" class="graf graf--p graf-after--pre">To use <code class="markup--code markup--p-code">defaultValue</code> on this type, you just have to create a <code class="markup--code markup--p-code">DefaultValue</code> instance for this particular type.</p><pre name="c9e5" id="c9e5" class="graf graf--pre graf-after--p">instance defaultColor :: DefaultValue Color where <br>    defaultValue = GREEN</pre><pre name="764e" id="764e" class="graf graf--pre graf-after--pre graf--trailing">&gt;&gt;&gt; defaultValue :: Color<br>&gt;&gt;&gt; GREEN</pre></div></div></section><section name="393a" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="efc3" id="efc3" class="graf graf--p graf--leading"><strong class="markup--strong markup--p-strong">Bonus Tips</strong></p><p name="e4f0" id="e4f0" class="graf graf--p graf-after--p">There are scenarios, where we want to provide different default value for a a type which is <strong class="markup--strong markup--p-strong">already defined</strong> in this module.</p><p name="f41d" id="f41d" class="graf graf--p graf-after--p">For example, we want our <code class="markup--code markup--p-code">age</code> field’s default value to be 18, since it’s an Int defaultValue will yield <code class="markup--code markup--p-code">0</code> . So we can wrap the Int in a newtype and provide our own DefaultValue Implementation for it.</p><pre name="fd6e" id="fd6e" class="graf graf--pre graf-after--p">newtype Age = Age Int<br>instance defaultAge :: DefaultValue Age where <br>    defaultValue = 18</pre><pre name="afa8" id="afa8" class="graf graf--pre graf-after--pre graf--trailing">&gt;&gt;&gt; defaultValue :: Age<br>&gt;&gt;&gt; 18</pre></div></div></section><section name="7c8e" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="5c83" id="5c83" class="graf graf--p graf--leading graf--trailing">Hope you’ve liked the article and found this helpful, Let me know it by Clapping👏 or through the comments.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@imsaravananm" class="p-author h-card">Saravanan M</a> on <a href="https://medium.com/p/a80f1210d06b"><time class="dt-published" datetime="2022-10-23T04:54:37.613Z">October 23, 2022</time></a>.</p><p><a href="https://medium.com/@imsaravananm/defaultvalues-create-default-values-out-of-thin-air-exploring-purescript-modules-4-a80f1210d06b" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on October 7, 2023.</p></footer></article></body></html>

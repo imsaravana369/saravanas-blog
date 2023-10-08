@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Named Constructor vs Factory Constructor in Dart</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Named Constructor vs Factory Constructor in Dart</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+In this article, we will understand what are the differences between a named and a factory constructor and when to prefer one over the…
+</section>
+<section data-field="body" class="e-content">
+<section name="df59" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="751b" id="751b" class="graf graf--h3 graf--leading graf--title">Named Constructor vs Factory Constructor in Dart</h3><p name="94f7" id="94f7" class="graf graf--p graf-after--h3">This is also one of the most confusing topics for dart beginners and also for people who are new to object-oriented programming. They are like<strong class="markup--strong markup--p-strong"> <em class="markup--em markup--p-em">“why do we need all these?”</em></strong><em class="markup--em markup--p-em"> </em><strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">“Both of them look almost similar” “when should I prefer one over the other?” </em></strong>If you have any of these doubts I’m here to solve that riddle.</p><h4 name="3161" id="3161" class="graf graf--h4 graf-after--p"><strong class="markup--strong markup--h4-strong"><em class="markup--em markup--h4-em">When we invoke a Constructor?</em></strong></h4><p name="c5ae" id="c5ae" class="graf graf--p graf-after--h4">We invoke a constructor when we need an object of the class. Sometimes we don’t care whether it’s a new instance or a pre-existing instance or a sub-type instance, all we need is an instance that is <strong class="markup--strong markup--p-strong">compatible </strong>but sometimes, we need a <strong class="markup--strong markup--p-strong">new instance and of the exact type</strong>(not above not below). This is where the difference between the two constructors lies. If you don’t understand that, let me explain it more clearly.</p><h3 name="2b3b" id="2b3b" class="graf graf--h3 graf-after--p"><strong class="markup--strong markup--h3-strong">Named Constructor</strong></h3><p name="7ff5" id="7ff5" class="graf graf--p graf-after--h3">A named constructor is nothing more than a constructor with a name. You may ask why we need a constructor with a name?</p><p name="b50d" id="b50d" class="graf graf--p graf-after--p">If you are from any other object-oriented programming languages like Java, C++, you can write a class with more than one constructor as long as the arguments differ. Sadly we don’t have the feature in Dart😥but Named constructor has our back😃 and I think it is much better than those overloaded Constructors of Java, C++, etc.</p><p name="747c" id="747c" class="graf graf--p graf-after--p">Let’s look at an example</p><figure name="c49f" id="c49f" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/02dc1ed07bc79fd5b8708355e09db608.js"></script></figure><p name="6afa" id="6afa" class="graf graf--p graf-after--figure">In this example, we are creating a named constructor fromJson() that accepts a map as its parameter and generates an object from the map.</p><p name="e2cc" id="e2cc" class="graf graf--p graf-after--p">We can also move the JSON decoding logic to the class itself,</p><figure name="fffa" id="fffa" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/8f9370456512acb5fcafdb84b4338cfc.js"></script></figure><figure name="49bc" id="49bc" class="graf graf--figure graf--iframe graf-after--figure"><script src="https://gist.github.com/imsaravana369/b15d3b0b62d4930a514c30e009efc2b6.js"></script></figure><p name="8dd9" id="8dd9" class="graf graf--p graf-after--figure">As you can see from <strong class="markup--strong markup--p-strong">line 5, </strong>we are using the named constructor similar to a normal constructor but with a name.</p><h4 name="1b2d" id="1b2d" class="graf graf--h4 graf-after--p"><strong class="markup--strong markup--h4-strong">What’s the use of Named Constructor?</strong></h4><ol class="postList"><li name="de1b" id="de1b" class="graf graf--li graf-after--h4"><strong class="markup--strong markup--li-strong">Improves Readability, </strong>as you can see the Person.fromJson() constructor makes it very obvious that we are creating an instance from a JSON.</li><li name="3a0a" id="3a0a" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Supports Overloaded Constructors, </strong>now we can have as many constructors we need for our class.</li><li name="7bda" id="7bda" class="graf graf--li graf-after--li graf--trailing">It always <strong class="markup--strong markup--li-strong">returns a new Instance of the exact type</strong>(Person in this case)<strong class="markup--strong markup--li-strong"> </strong>like a default constructor.</li></ol></div></div></section><section name="fe6c" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="c718" id="c718" class="graf graf--h3 graf--leading"><strong class="markup--strong markup--h3-strong"><em class="markup--em markup--h3-em">Factory Constructor</em></strong></h3><p name="1de4" id="1de4" class="graf graf--p graf-after--h3">I have already written two articles(<a href="https://imsaravananm.medium.com/factory-constructor-in-dart-part-1-1bbdf0d0f7f0" data-href="https://imsaravananm.medium.com/factory-constructor-in-dart-part-1-1bbdf0d0f7f0" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">part-1</a>, <a href="https://imsaravananm.medium.com/factory-constructor-in-dart-part-2-7db2a5981ac3" data-href="https://imsaravananm.medium.com/factory-constructor-in-dart-part-2-7db2a5981ac3" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">part-2</a>) on this topic. So I’m going to briefly talk about this one.</p><p name="d13e" id="d13e" class="graf graf--p graf-after--p">We use factory constructor when we want to</p><ol class="postList"><li name="6df0" id="6df0" class="graf graf--li graf-after--p">Decide which instance to return on runtime(<a href="https://imsaravananm.medium.com/factory-constructor-in-dart-part-1-1bbdf0d0f7f0" data-href="https://imsaravananm.medium.com/factory-constructor-in-dart-part-1-1bbdf0d0f7f0" class="markup--anchor markup--li-anchor" rel="noopener" target="_blank"><em class="markup--em markup--li-em">see this article</em></a>)</li><li name="4063" id="4063" class="graf graf--li graf-after--li graf--trailing">Cache instances for reusing purposes.</li></ol></div></div></section><section name="3ae2" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="0603" id="0603" class="graf graf--p graf--leading">So having read about both of them, let’s understand what’s the real difference between them</p><figure name="9300" id="9300" class="graf graf--figure graf--iframe graf-after--p"><iframe src="https://giphy.com/embed/jVZJsyEXEMPYBBJHLZ/twitter/iframe" width="435" height="241" frameborder="0" scrolling="no"></iframe></figure><h4 name="e2d8" id="e2d8" class="graf graf--h4 graf-after--figure">1.Access to instance members</h4><ul class="postList"><li name="7c47" id="7c47" class="graf graf--li graf-after--h4">A named Constructor has access to <strong class="markup--strong markup--li-strong"><em class="markup--em markup--li-em">this </em></strong><em class="markup--em markup--li-em">keyword so it can access any member variables and methods.</em></li><li name="a288" id="a288" class="graf graf--li graf-after--li">Factory Constructor is static so it has no access to <strong class="markup--strong markup--li-strong">this </strong>keyword.</li></ul><h4 name="e386" id="e386" class="graf graf--h4 graf-after--li">2. The Return Statement</h4><ul class="postList"><li name="d52f" id="d52f" class="graf graf--li graf-after--h4">Named Constructor works like a normal constructor, it need not return an instance explicitly. (No need for return statement) have you ever seen a constructor with a return statement at the end?</li><li name="0acd" id="0acd" class="graf graf--li graf-after--li">Factory Constructor should return an instance explicitly. See all the factory constructors, there’s always a return statement at the end.</li></ul><h4 name="2330" id="2330" class="graf graf--h4 graf-after--li">3. Type of instance returned</h4><ul class="postList"><li name="198b" id="198b" class="graf graf--li graf-after--h4">A named constructor can only generate the instance of the current class.</li><li name="83f7" id="83f7" class="graf graf--li graf-after--li">A factory constructor can decide which instance to return on runtime, it can return either the instance of the current class or any of the instances of its descendants class.</li></ul><h4 name="0c96" id="0c96" class="graf graf--h4 graf-after--li">4. New or Old instance</h4><ul class="postList"><li name="e81a" id="e81a" class="graf graf--li graf-after--h4">This may be a trivial point, but the named constructor will always return a new instance.</li><li name="de40" id="de40" class="graf graf--li graf-after--li">Factory constructor can return a new instance or a cached instance based on our implementation(more on this <a href="https://imsaravananm.medium.com/factory-constructor-in-dart-part-2-7db2a5981ac3" data-href="https://imsaravananm.medium.com/factory-constructor-in-dart-part-2-7db2a5981ac3" class="markup--anchor markup--li-anchor" rel="noopener" target="_blank">here</a>)</li></ul><p name="44cd" id="44cd" class="graf graf--p graf-after--li graf--trailing">I hope, now you are very sure when to prefer the one over the other. Give a thumbs up👍 to this article if you liked it and you can also share your ideas in the comment section. Thank you.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@imsaravananm" class="p-author h-card">Saravanan M</a> on <a href="https://medium.com/p/ba28250b2747"><time class="dt-published" datetime="2021-06-28T17:20:01.552Z">June 28, 2021</time></a>.</p><p><a href="https://medium.com/@imsaravananm/named-constructor-vs-factory-constructor-in-dart-ba28250b2747" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on October 7, 2023.</p></footer></article></body></html>

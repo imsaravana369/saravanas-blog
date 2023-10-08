@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Better Error Handling with Either type in Dart</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Better Error Handling with Either type in Dart</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+In this article, I will talk about how we can use a functional programming concept ‘Either Type’ to handle error better in dart.
+</section>
+<section data-field="body" class="e-content">
+<section name="31e4" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="afad" id="afad" class="graf graf--h3 graf--leading graf--title">Better Error Handling with Either type in Dart</h3><p name="9201" id="9201" class="graf graf--p graf-after--h3">Have you ever wondered “Is there any Wrapper class that can wrap both the good response and the bad response into a single type?” If you’ve never wondered that, let me explain why it’s a handy feature.</p><p name="dd7e" id="dd7e" class="graf graf--p graf-after--p">Let’s consider we have these two classes,</p><figure name="89f5" id="89f5" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/1fecd0ed340b8ec1cdf5d54ceea78b8b.js"></script></figure><ul class="postList"><li name="0ec7" id="0ec7" class="graf graf--li graf-after--figure">The Failure class is a class we return when some exception occurs.</li><li name="6380" id="6380" class="graf graf--li graf-after--li">The Person class is the model class that we want to return when we have a valid response.</li></ul><p name="70e4" id="70e4" class="graf graf--p graf-after--li">Let’s say we want to wrap both of them in a single class, how can we do that? Here’s a very naive approach.</p><figure name="b603" id="b603" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/d2629e3bdde8eb3bf81f34c19005db2e.js"></script></figure><p name="344f" id="344f" class="graf graf--p graf-after--figure">Here&#39;s how we can use it,</p><figure name="667a" id="667a" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/e13a5c1ac219dfa3c118b7b29f4ba805.js"></script></figure><p name="e10f" id="e10f" class="graf graf--p graf-after--figure">This class is cool. What’s the problem with this🙄? Let us understand</p><ul class="postList"><li name="b69d" id="b69d" class="graf graf--li graf-after--p">The response object <strong class="markup--strong markup--li-strong">can have both the person and failure attributes</strong> initiated at the same time. This is surely not the behavior we want. It should hold either a Person or a failure. Both of them shouldn’t exist at the same time.</li></ul><pre name="d665" id="d665" class="graf graf--pre graf-after--li"> Response res = Response(failedReponse);</pre><pre name="d334" id="d334" class="graf graf--pre graf-after--pre"> res.person = validResponse; //now &#39;res&#39; has both person and failure</pre><ul class="postList"><li name="cc65" id="cc65" class="graf graf--li graf-after--pre">You may forget to check the error.</li></ul><figure name="63a7" id="63a7" class="graf graf--figure graf-after--li"><img class="graf-image" data-image-id="1*66MXwDHtXYUUr5DTllq7xw.jpeg" data-width="592" data-height="592" src="https://cdn-images-1.medium.com/max/800/1*66MXwDHtXYUUr5DTllq7xw.jpeg"></figure><pre name="9237" id="9237" class="graf graf--pre graf-after--figure">void main(){<br>    Failure failedReponse = Failure(&#39;something went wrong&#39;);  <br>    Response res = Response(failedReponse);</pre><pre name="5850" id="5850" class="graf graf--pre graf-after--pre">    //still valid, compiler doesn&#39;t complain, but prints &#39;null&#39;<br>    print(&#39;Response : ${res.person?.name}&#39;);<br>}</pre><p name="0b3c" id="0b3c" class="graf graf--p graf-after--pre">So we need something,</p><ol class="postList"><li name="b9b5" id="b9b5" class="graf graf--li graf-after--p">To Make sure only one type is available at the same time.</li><li name="10a3" id="10a3" class="graf graf--li graf-after--li graf--trailing">To Enforce the error handling (make the compiler complaint).</li></ol></div></div></section><section name="c450" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h4 name="88cd" id="88cd" class="graf graf--h4 graf--leading">Dartz Package</h4><p name="5112" id="5112" class="graf graf--p graf-after--h4">Dart doesn’t have any built-in type to make these happen but we have <a href="https://pub.dev/packages/dartz" data-href="https://pub.dev/packages/dartz" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank"><em class="markup--em markup--p-em">dartz</em></a><strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">, </em></strong><em class="markup--em markup--p-em">a</em><strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em"> </em></strong><em class="markup--em markup--p-em">functional programming</em> package in dart. It supports a type <strong class="markup--strong markup--p-strong">Either&lt;Left, Right&gt;</strong> that meets our exact use-case.</p><p name="8c77" id="8c77" class="graf graf--p graf-after--p">First, add the <a href="https://pub.dev/packages/dartz/install" data-href="https://pub.dev/packages/dartz/install" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">package </a>to your <strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">pubspec.yaml</em></strong> file,</p><pre name="d846" id="d846" class="graf graf--pre graf-after--p"><code class="markup--code markup--pre-code">dependencies:<br>  dartz: ^0.9.2</code></pre><h4 name="10a0" id="10a0" class="graf graf--h4 graf-after--pre">What is the Either Type?</h4><p name="14a1" id="14a1" class="graf graf--p graf-after--h4">The <code class="markup--code markup--p-code">Either</code> type is used to represent a value that has any one of the two specified types. It is common to see <code class="markup--code markup--p-code">Either</code> used to represent a success value or a failure value, although that doesn&#39;t have to be the case.</p><pre name="4dbe" id="4dbe" class="graf graf--pre graf-after--p">Either&lt;int, String&gt; response = Right(&quot;Hello, im right&quot;);</pre><p name="9ffe" id="9ffe" class="graf graf--p graf-after--pre">This is how simple it is to use Either(), you declare the Left and Right type inside the generic type parameters in the respective order.</p><figure name="cb8e" id="cb8e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*7KvjsWbh7omKd33qvjPABg.png" data-width="971" data-height="396" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*7KvjsWbh7omKd33qvjPABg.png"></figure><p name="9e44" id="9e44" class="graf graf--p graf-after--figure">To assign value use <code class="markup--code markup--p-code">Left(value)</code> or <code class="markup--code markup--p-code">Right(value)</code> . In the above code, I specified <code class="markup--code markup--p-code"><em class="markup--em markup--p-em">Right(“Hello, im right”)</em></code> to put the String as the Right value, in this case, the Left value will be empty (the integer value is empty).</p><figure name="4e70" id="4e70" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/c038a6160321715d3f81e8670398a83b.js"></script></figure><p name="b405" id="b405" class="graf graf--p graf-after--figure">The fold method here is responsible for handling both the values, if the left value is available, it will call the first callback method <code class="markup--code markup--p-code">print(‘Integer : $integerValue’)</code> , otherwise, it will call the second callback<code class="markup--code markup--p-code"> print(‘String : $stringValue’)</code></p><p name="c865" id="c865" class="graf graf--p graf-after--p">This is exactly what we wanted, we want to have</p><ol class="postList"><li name="8d8e" id="8d8e" class="graf graf--li graf-after--p">Only one of the values to be available at a time.</li><li name="c3fb" id="c3fb" class="graf graf--li graf-after--li">Corresponding actions should be taken only after evaluating the availability of both the Left &amp; Right values.</li></ol><h4 name="030f" id="030f" class="graf graf--h4 graf-after--li"><strong class="markup--strong markup--h4-strong">Error handling with Either</strong></h4><p name="5806" id="5806" class="graf graf--p graf-after--h4">Now let’s use the power of Either to restructure our <strong class="markup--strong markup--p-strong">Response </strong>model class.</p><figure name="5076" id="5076" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/2d7b9c5d708e768b8a360c8f7dcda050.js"></script></figure><p name="1ecd" id="1ecd" class="graf graf--p graf-after--figure">We no more have two separate instances for Failure &amp; Person. We combined both of them to a single instance <strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">‘person’</em></strong> using Either Class.</p><figure name="daa3" id="daa3" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/47cd79bba3051be495b30482aca3954c.js"></script></figure><p name="c04f" id="c04f" class="graf graf--p graf-after--figure">Here we must handle both of the cases for Failure &amp; Person object using fold(), otherwise, our code won&#39;t compile.</p><p name="609c" id="609c" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">What we did with Either is,</strong></p><ol class="postList"><li name="2c5f" id="2c5f" class="graf graf--li graf-after--p">We made sure only one type is available at any point in time.</li><li name="600c" id="600c" class="graf graf--li graf-after--li graf--trailing">We made sure the error is always handled.</li></ol></div></div></section><section name="5a38" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="35de" id="35de" class="graf graf--p graf--leading">I have used very simple examples to explain the concept of Either type but it is quite powerful💪 to solve many complex problems. There are many other types and functions in dartz package which make a flutter developer&#39;s life easier🤗. I will try to cover them in the subsequent articles.</p><p name="a6c2" id="a6c2" class="graf graf--p graf-after--p graf--trailing">If you’ve liked this article, please give a thumbs up 👍 and I will meet you with another Dart article. Thank you🙏 and Happy learning.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@imsaravananm" class="p-author h-card">Saravanan M</a> on <a href="https://medium.com/p/b91bef20d716"><time class="dt-published" datetime="2021-06-29T18:57:49.463Z">June 29, 2021</time></a>.</p><p><a href="https://medium.com/@imsaravananm/better-error-handling-with-either-type-in-dart-b91bef20d716" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on October 7, 2023.</p></footer></article></body></html>

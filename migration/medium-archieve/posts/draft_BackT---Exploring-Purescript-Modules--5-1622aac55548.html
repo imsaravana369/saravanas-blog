@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>BackT — Exploring Purescript Modules #5</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">BackT — Exploring Purescript Modules #5</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+In this series #exploring-purescript-modules, we have been seeing exploring different modules available in pursuit. For this article, I…
+</section>
+<section data-field="body" class="e-content">
+<section name="6571" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="6b7f" id="6b7f" class="graf graf--h3 graf--leading graf--title">BackT — Exploring Purescript Modules #5 </h3><p name="73de" id="73de" class="graf graf--p graf-after--h3">In this series #exploring-purescript-modules, we have been seeing exploring different modules available in <a href="https://pursuit.purescript.org/" data-href="https://pursuit.purescript.org/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">pursuit</a>. For this article, I would like to share with you a module which will let us do backtracking in Monad way. The name of the module is BackT.</p><h4 name="1a6b" id="1a6b" class="graf graf--h4 graf-after--p">What is this module about?</h4><p name="5df0" id="5df0" class="graf graf--p graf-after--h4">Wouldn’t it be better to move back if something fails and restore the state and restart from the place where everything was working fine? <br><a href="https://en.wikipedia.org/wiki/Backtracking" data-href="https://en.wikipedia.org/wiki/Backtracking" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Backtracking</a> has lot of use cases in real world scenario and BackT is a monad for doing Backtracking.</p><h4 name="0117" id="0117" class="graf graf--h4 graf-after--p">What you can do with it?</h4><p name="6f2c" id="6f2c" class="graf graf--p graf-after--h4">With this BackT monad you can do three things,</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="java" name="ccbe" id="ccbe" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">data <span class="hljs-type">FailBack</span> <span class="hljs-variable">a</span> <span class="hljs-operator">=</span> BackPoint a | NoBack a | GoBack</span></pre><ol class="postList"><li name="f6f9" id="f6f9" class="graf graf--li graf-after--pre">NoBack a — Move Forward</li><li name="3fda" id="3fda" class="graf graf--li graf-after--li">BackPoint — Create a Checkpoint</li><li name="5854" id="5854" class="graf graf--li graf-after--li graf--trailing">GoBack — Go to the previous checkpoint<br><br></li></ol></div></div></section><section name="3fac" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h4 name="e0d8" id="e0d8" class="graf graf--h4 graf--leading">1. NoBack a — Go Forward</h4><p name="7204" id="7204" class="graf graf--p graf-after--h4">We use it when everything is fine and we want to move to the next statement.</p><h4 name="0778" id="0778" class="graf graf--h4 graf-after--p"><strong class="markup--strong markup--h4-strong">2. </strong>BackPoint — <strong class="markup--strong markup--h4-strong">Create a Checkpoint</strong></h4><p name="5eb7" id="5eb7" class="graf graf--p graf-after--h4"> We use it when we want to create a checkpoint, where we can come back when we want to(in future).</p><h4 name="4704" id="4704" class="graf graf--h4 graf-after--p">3. GoBack — Go to the previous checkpoint</h4><p name="2679" id="2679" class="graf graf--p graf-after--h4"> When some condition unholds(see how we solve sudoku puzzle with backtracking) or some error shows up or we want to move to the previous screen etc. We can use Goback, which will take us to the last registered BackPoint.</p><h4 name="6d62" id="6d62" class="graf graf--h4 graf-after--p">Note beforing moving on to example,</h4><p name="7e73" id="7e73" class="graf graf--p graf-after--h4">Before moving on to the example, I want to explain one thing, BackT is not just a monad its a <a href="https://en.wikipedia.org/wiki/Monad_transformer" data-href="https://en.wikipedia.org/wiki/Monad_transformer" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">monad transformer</a>, meaning that it can hold another monad within it.</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="java" name="1dd5" id="1dd5" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">newtype BackT <span class="hljs-type">m</span> <span class="hljs-variable">a</span> <span class="hljs-operator">=</span> BackT (m(FailBack a))</span></pre><p name="2d08" id="2d08" class="graf graf--p graf-after--pre">Here, the <code class="markup--code markup--p-code">m</code> can be an <code class="markup--code markup--p-code">Effect</code> , <code class="markup--code markup--p-code">Aff</code> or anything. </p><h4 name="a7e3" id="a7e3" class="graf graf--h4 graf-after--p">Example,</h4><p name="10ed" id="10ed" class="graf graf--p graf-after--h4">Let’s say I want to roll a dice until I get a side more than 3. How would I implement it with BackT?</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="java" name="cec3" id="cec3" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-keyword">import</span> <span class="hljs-title function_">Effect</span> <span class="hljs-params">(Effect)</span><br /><span class="hljs-keyword">import</span> Effect.Console (log)<br /><span class="hljs-keyword">import</span> Effect.Random(randomInt)<br /><span class="hljs-keyword">import</span> <span class="hljs-keyword">import</span> Control.Monad.Trans.Class(lift)<br /><br />dice :: BackT Effect <span class="hljs-type">Unit</span> <br /><span class="hljs-variable">dice</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">do</span> <br />    dice &lt;- BackT $ BackPoint &lt;$&gt; (randomInt <span class="hljs-number">1</span> <span class="hljs-number">6</span>)<br />    _ &lt;- lift $ log $ <span class="hljs-string">&quot;dice:&quot;</span> &lt;&gt; (show dice)<br />    <span class="hljs-keyword">if</span> dice &lt;= <span class="hljs-number">3</span><br />        then BackT $ pure GoBack <br />        <span class="hljs-keyword">else</span> BackT $ pure unit<br /><br /></span></pre><p name="09a2" id="09a2" class="graf graf--p graf-after--pre">In main function, I would do something like,</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="java" name="95e5" id="95e5" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">main :: Effect <span class="hljs-type">Unit</span><br /><span class="hljs-variable">main</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">do</span> <br />    _ &lt;- runBackT dice<br />    pure unit</span></pre><p name="dcfd" id="dcfd" class="graf graf--p graf-after--pre">It works like a loop and run until the dice rolled is more than 3,</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="makefile" name="6c68" id="6c68" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">&gt;&gt;&gt; spago run<br /><span class="hljs-section">dice:3</span><br /><span class="hljs-section">dice:1</span><br /><span class="hljs-section">dice:3</span><br /><span class="hljs-section">dice:2</span><br /><span class="hljs-section">dice:6</span></span></pre><p name="9f6b" id="9f6b" class="graf graf--p graf-after--pre">Now let’s decode the above <code class="markup--code markup--p-code">dice</code> function,</p><ol class="postList"><li name="99ea" id="99ea" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Return type</strong></li></ol><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="kotlin" name="eb9b" id="eb9b" class="graf graf--pre graf-after--li graf--preV2"><span class="pre--content">dice :: BackT Effect <span class="hljs-built_in">Unit</span></span></pre><p name="3d76" id="3d76" class="graf graf--p graf-after--pre">As I told before its a Monad Transformer, so the inner monad we are going to work with is <code class="markup--code markup--p-code">Effect</code> as we want to calculate random numbers(which is an effect) and our function don’t want to return anything so a Unit.</p><p name="bff9" id="bff9" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">2. Within the do block,</strong></p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="ruby" name="0af0" id="0af0" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">dice &lt;- <span class="hljs-title class_">Back</span>T <span class="hljs-variable">$ </span><span class="hljs-title class_">BackPoint</span> &lt;<span class="hljs-variable">$&gt;</span> (randomInt <span class="hljs-number">1</span> <span class="hljs-number">6</span>)</span></pre><p name="d8f5" id="d8f5" class="graf graf--p graf-after--pre">we know we have to return a <code class="markup--code markup--p-code">m (Failback a)</code> on everyline(within do block), here our <code class="markup--code markup--p-code">m</code> is <code class="markup--code markup--p-code">Effect</code></p><p name="e4c2" id="e4c2" class="graf graf--p graf-after--p graf--trailing">In the above line, I’m using `<a href="https://pursuit.purescript.org/packages/purescript-random/6.0.0/docs/Effect.Random#v:randomInt" data-href="https://pursuit.purescript.org/packages/purescript-random/6.0.0/docs/Effect.Random#v:randomInt" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">randomInt</a>` to calculate  </p></div></div></section>
+</section>
+<footer><p><a href="https://medium.com/p/1622aac55548">View original.</a></p><p>Exported from <a href="https://medium.com">Medium</a> on October 7, 2023.</p></footer></article></body></html>

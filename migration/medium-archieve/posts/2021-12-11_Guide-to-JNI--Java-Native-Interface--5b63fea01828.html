@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Guide to JNI (Java Native Interface)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Guide to JNI (Java Native Interface)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Let’s call a C++ function from your Java code.
+</section>
+<section data-field="body" class="e-content">
+<section name="81da" class="section section--body section--first"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="34c0" id="34c0" class="graf graf--h3 graf--leading graf--title">Guide to JNI (Java Native Interface)</h3><p name="0dcb" id="0dcb" class="graf graf--p graf-after--h3">Have you ever wondered “Can we call C/C++ code from Java code?” Yes, we can do that using JNI, an interface provided by JVM to let your java code call a native C/C++ code.</p><figure name="8359" id="8359" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*H4kXxTeJmwB7_etBymMahQ.jpeg" data-width="1417" data-height="591" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*H4kXxTeJmwB7_etBymMahQ.jpeg"></figure><p name="3065" id="3065" class="graf graf--p graf-after--figure">Recently, I’ve found my friend working on JNI in his internship and was really fascinated by the value it can provide. Value? Why in the world do we need to call a C/C++ code in a Java code?</p><p name="6921" id="6921" class="graf graf--p graf-after--p">We all know Java is platform-independent (write once, run anywhere) but it comes at a cost, reduced performance when compared to native code. Suppose if you want to write a program that runs as fast⚡ and efficient as native code or you want to use a functionality that a C library provides which is not available in Java. Of course, you can re-write that whole C library in Java but you don’t want to reinvent the wheel again JNI has got your back.</p><blockquote name="3725" id="3725" class="graf graf--blockquote graf-after--p">The primary reason why I’m writing this article is, I and my friend <strong class="markup--strong markup--blockquote-strong">failed a lot</strong> while trying to replicate a simple JNI program from the web and I don’t want you to go through the rough rut that we’ve gone through.</blockquote><p name="0a6c" id="0a6c" class="graf graf--p graf-after--blockquote">I’m going to demonstrate this in windows. But it’s easily replicable in any OS once you got an understanding of how to connect the dots.</p><p name="9526" id="9526" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Pre-requisites</strong>:</p><blockquote name="56de" id="56de" class="graf graf--blockquote graf-after--p">Java and g++/gcc should be installed on your pc.</blockquote><blockquote name="c62d" id="c62d" class="graf graf--blockquote graf-after--blockquote"><a href="https://confluence.atlassian.com/doc/setting-the-java_home-variable-in-windows-8895.html" data-href="https://confluence.atlassian.com/doc/setting-the-java_home-variable-in-windows-8895.html" class="markup--anchor markup--blockquote-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--blockquote-strong">JAVA_HOME </strong></a>variable should be set.</blockquote><blockquote name="46b2" id="46b2" class="graf graf--blockquote graf-after--blockquote"><a href="https://www.javatpoint.com/how-to-set-path-in-java" data-href="https://www.javatpoint.com/how-to-set-path-in-java" class="markup--anchor markup--blockquote-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--blockquote-strong">JDK&#39;s </strong>bin</a> &amp; <a href="https://stackoverflow.com/questions/48612744/how-to-add-g-from-mingw-to-path/48828104" data-href="https://stackoverflow.com/questions/48612744/how-to-add-g-from-mingw-to-path/48828104" class="markup--anchor markup--blockquote-anchor" rel="noopener" target="_blank">MinGW g++</a> should be in your path.</blockquote><h4 name="42d6" id="42d6" class="graf graf--h4 graf-after--blockquote">1. Declare a function with the <strong class="markup--strong markup--h4-strong">native </strong>keyword.</h4><figure name="7d8c" id="7d8c" class="graf graf--figure graf--iframe graf-after--h4"><script src="https://gist.github.com/imsaravana369/d964737c47c98e4841cabda52200a25a.js"></script></figure><ul class="postList"><li name="0900" id="0900" class="graf graf--li graf-after--figure">We are loading a dll library called <strong class="markup--strong markup--li-strong"><em class="markup--em markup--li-em">native(</em></strong>it can be of any name). The reason why it’s inside a static block is we need to load the library as soon as our class is loaded.</li></ul><p name="1a6c" id="1a6c" class="graf graf--p graf-after--li">Run the below command</p><blockquote name="06ee" id="06ee" class="graf graf--pullquote graf-after--p"><strong class="markup--strong markup--pullquote-strong">javac -h . HelloWorldJNI.java</strong></blockquote><ul class="postList"><li name="4d3c" id="4d3c" class="graf graf--li graf-after--pullquote">-h . — create a header file that has all the native function declarations that we’ve declared in the java file. The DOT indicates the file should be created in the current directory.</li></ul><p name="b25d" id="b25d" class="graf graf--p graf-after--li">It will generate a header file named “HelloWorldJNI.h” which declares a single function with the same signature(in JNI-Style) as sayHello().</p><figure name="7203" id="7203" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/54d75e8bc06a48d2b7e575628dea6ce9.js"></script><figcaption class="imageCaption">Here’s the <strong class="markup--strong markup--figure-strong">auto-generated</strong> <strong class="markup--strong markup--figure-strong">header</strong> <strong class="markup--strong markup--figure-strong">file </strong>(after removing all the comments)</figcaption></figure><h4 name="79e7" id="79e7" class="graf graf--h4 graf-after--figure">2. Create a CPP file and generate an Object file from it.</h4><p name="947d" id="947d" class="graf graf--p graf-after--h4">Now we gonna create a C++ file that has a function with the same method signature as in “HelloWorldJNI.h”. (copy-paste the signature from the header file, ctrl+C/ctrl+V our favorite thing)</p><figure name="2cdb" id="2cdb" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/54749463c52529d2878cf4965d3fb0e4.js"></script><figcaption class="imageCaption"><strong class="markup--strong markup--figure-strong">Make sure the function signature is the same.</strong></figcaption></figure><ul class="postList"><li name="5637" id="5637" class="graf graf--li graf-after--figure">In this c++ file, we are trying to call a native method(<em class="markup--em markup--li-em">sayHello()</em>) from our JNI styled-c++ function.</li><li name="e7a8" id="e7a8" class="graf graf--li graf-after--li">Make sure to include the “HelloWorldJNI.h” header file. (if you don’t, You will get <strong class="markup--strong markup--li-strong">UnSupportedLinkError</strong>)</li><li name="31d5" id="31d5" class="graf graf--li graf-after--li">If you’re using any code editor, <em class="markup--em markup--li-em">#include&lt;jni.h&gt; </em>may be underlined with squiggly red lines, its because your IDE can’t find the<em class="markup--em markup--li-em"> jni.h </em>file, believe me, it will vanish once we include the path while compiling.</li></ul><p name="f1de" id="f1de" class="graf graf--p graf-after--li">Run the below command,</p><blockquote name="7fc5" id="7fc5" class="graf graf--blockquote graf-after--p"><strong class="markup--strong markup--blockquote-strong">g++ -c -I”%JAVA_HOME%\include” -I”%JAVA_HOME%\include\win32&quot; HelloWorldJNI.cpp</strong></blockquote><ul class="postList"><li name="62e0" id="62e0" class="graf graf--li graf-after--blockquote">-c — output an object file (.o)</li><li name="b5e3" id="b5e3" class="graf graf--li graf-after--li">-I — specify an include directory</li></ul><blockquote name="f502" id="f502" class="graf graf--blockquote graf--startsWithDoubleQuote graf-after--li">”%JAVA_HOME%\include” — path has the jni.h file</blockquote><p name="5051" id="5051" class="graf graf--p graf-after--blockquote">We will get an object file(HelloWorldJNI.o) as output which we will use to create a dll(dynamic link library) file.</p><h4 name="69c2" id="69c2" class="graf graf--h4 graf-after--p">3. Create a dll file from the object file</h4><p name="079f" id="079f" class="graf graf--p graf-after--h4">Run the below command,</p><blockquote name="8b40" id="8b40" class="graf graf--pullquote graf-after--p">g++ -shared -o native.dll HelloWorldJNI.o</blockquote><ul class="postList"><li name="38f9" id="38f9" class="graf graf--li graf-after--pullquote">-shared — Create a shared library file (dll file in windows)</li><li name="9112" id="9112" class="graf graf--li graf-after--li">-o native.dll — name it native.dll</li><li name="05e4" id="05e4" class="graf graf--li graf-after--li">Make sure the name of the dll file is the same as the name you are loading from your java program.</li></ul><p name="1b7c" id="1b7c" class="graf graf--p graf-after--li">Now you will see a native.dll in your current directory.</p><h4 name="7c9d" id="7c9d" class="graf graf--h4 graf-after--p">4. Execute the Java file</h4><p name="b3a8" id="b3a8" class="graf graf--p graf-after--h4">Now we have everything to run our Java program. Run the below command or run it as a Java program in any IDE.</p><blockquote name="b91a" id="b91a" class="graf graf--blockquote graf-after--p">java HelloWorldJNI</blockquote><p name="aaa2" id="aaa2" class="graf graf--p graf-after--blockquote graf--trailing">Yup, we are done, “Hello from C++ !!” will be outputted to your terminal.</p></div></div></section><section name="e178" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="9ea7" id="9ea7" class="graf graf--h3 graf--leading">Bonus: Let’s make your life much easier</h3><p name="80a1" id="80a1" class="graf graf--p graf-after--h3">The constant linking and compiling become very tedious if you’re constantly changing your c++ code. So let’s create a batch file,</p><figure name="2037" id="2037" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/imsaravana369/ccd73c80c9759dc0a09b576d62e99178.js"></script><figcaption class="imageCaption">save this file as <strong class="markup--strong markup--figure-strong">runJ.bat</strong></figcaption></figure><p name="33e6" id="33e6" class="graf graf--p graf-after--figure">You just have to type <strong class="markup--strong markup--p-strong">runJ </strong>in your console. All the commands will be executed one by one for you, that’s the beauty of batch files.</p><figure name="1b0e" id="1b0e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*ECofxkx1DAJn5cVxwM0T-Q.png" data-width="1541" data-height="342" src="https://cdn-images-1.medium.com/max/800/1*ECofxkx1DAJn5cVxwM0T-Q.png"></figure><p name="8066" id="8066" class="graf graf--p graf-after--figure">I hope you have learned something new in this tutorial and no more regretting why you’ve learned C/C++ in your early days. I strongly recommend <a href="https://www.baeldung.com/jni" data-href="https://www.baeldung.com/jni" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">this </a>article to get a better understanding of JNI.</p><blockquote name="6986" id="6986" class="graf graf--blockquote graf-after--p">Strange Error: If you’re getting an error, try to run it in cmd instead of powershell (in vs code)</blockquote><p name="3e64" id="3e64" class="graf graf--p graf-after--blockquote graf--trailing">Clap👏👏 if you’ve liked the article and share it with your friends if they are also doing JNI tasks in their internship😂.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@imsaravananm" class="p-author h-card">Saravanan M</a> on <a href="https://medium.com/p/5b63fea01828"><time class="dt-published" datetime="2021-12-11T17:36:07.535Z">December 11, 2021</time></a>.</p><p><a href="https://medium.com/@imsaravananm/guide-to-jni-java-native-interface-5b63fea01828" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on October 7, 2023.</p></footer></article></body></html>
