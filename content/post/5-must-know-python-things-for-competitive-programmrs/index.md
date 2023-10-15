@@ -1,6 +1,6 @@
 +++
 title = '5-must-know-python-things-for-competitive-programmrs'
-draft = false
+draft = true
 +++
 
 

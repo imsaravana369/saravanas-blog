@@ -28,7 +28,12 @@ disqusShortname = "saravanas-blog"
 [[params.socialIcons]]
 	icon = "fab fa-github"
 	title = "Github"
-	url = "https://www.linkedin.com/in/saravanan-m-100728186/"
+	url = "https://github.com/imsaravana369"
+
+[[params.socialIcons]]
+   icon = "fab fa-medium"
+   title = "Medium"
+   url  = "https://medium.com/@imsaravananm"
 [menu]
 
   [[menu.main]]
