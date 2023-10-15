@@ -1,6 +1,6 @@
 +++
 title = 'If Else Campaign'
-date = 2023-10-02T13:50:39+05:30
+date = '2023-10-02T13:50:39+05:30'
 draft = false 
 tags = ["thumbnail"]
 toc = true
