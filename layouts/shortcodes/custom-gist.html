@@ -1,0 +1,11 @@
+{{ $gistID := .Get 0 }}
+{{ $subtext := .Get 1 }}
+
+<figure class="gist">
+    <script src="https://gist.github.com/imsaravana369/{{ $gistID }}.js"></script>
+    {{ with $subtext }}
+    <figcaption style="color: white">{{ . }}</figcaption>
+    {{ end }}
+</figure>
+<br/>
+

@@ -1,41 +1,14 @@
 +++
-title = 'on-joining-the-anti-if-campaign'
+title = 'on Joining The Anti If Campaign'
 date = '2023-10-02T13:50:39+05:30'
-draft = true 
+draft = false 
 +++
-
-On Joining the Anti-If campaign
-===============================
-
-[![Saravanan M](https://miro.medium.com/v2/resize:fill:88:88/1*fSLksJqmsL7E-IcsJXHrkw.jpeg)
-
-](https://medium.com/@imsaravananm?source=post_page-----26c5940b9c9a--------------------------------)[![Nerd For Tech](https://miro.medium.com/v2/resize:fill:48:48/1*53-lvCPnPV4sTOmvcITDxw.png)
-
-](https://medium.com/nerd-for-tech?source=post_page-----26c5940b9c9a--------------------------------)
-
-[Saravanan M](https://medium.com/@imsaravananm?source=post_page-----26c5940b9c9a--------------------------------)
-
-·
-
-[Follow](https://medium.com/m/signin?actionUrl=https%3A%2F%2Fmedium.com%2F_%2Fsubscribe%2Fuser%2F31a87164ab1a&operation=register&redirect=https%3A%2F%2Fmedium.com%2Fnerd-for-tech%2Fon-joining-the-anti-if-campaign-26c5940b9c9a&user=Saravanan+M&userId=31a87164ab1a&source=post_page-31a87164ab1a----26c5940b9c9a---------------------post_header-----------)
-
-Published in[
-
-Nerd For Tech
-
-](https://medium.com/nerd-for-tech?source=post_page-----26c5940b9c9a--------------------------------)·5 min read·Sep 30
-
-\--
-
-Listen
-
-Share
 
 I always have had a nagging feeling while writing if-else condition, it wasn’t until I came across the term ‘[anti-if campaign](https://francescocirillo.com/products/the-anti-if-campaign)’ that I understood why.
 
 Now, as a member of the anti-if campaign, allow me to persuade you why it’s worth joining as well. (disclaimer at the end😂)
 
-> **Note:** When I mean \`if-else\` that also includes other branching statements like switch, else-if etc.
+> **Note:** When I mean `if-else` that also includes other branching statements like switch, else-if etc.
 
 yeah, time to throw them away.
 
@@ -50,8 +23,8 @@ Excessive nesting of conditions not only hampers code maintainability but also s
 
 Consider this example,
 
-```
-def sign\_mult(a,b):  
+{{< highlight python >}}
+def sign_mult(a,b):  
     if (a == '+' and b == '+'):  
         return '+'  
     elif (a == '-' and b == '-'):  
@@ -60,14 +33,14 @@ def sign\_mult(a,b):
         return '-'  
     elif (a == '-' and b == '+'):  
         return '-'
-```
+{{< /highlight >}}
 
 This could be easily rewritten as,
 
-```
-def sign\_mult(a,b):   
-   return ‘+’ if a == b else ‘-’
-```
+{{< highlight python >}}
+def sign_mult(a,b):   
+   return '+' if a == b else '-'
+{{< /highlight >}}
 
 Still we are using if-else([without if-else version](https://onlinegdb.com/j6YeMyQXP)) but this version is more concise, it looks more like an equation that resolves itself whereas the first nested version prompts us to mentally execute the checks step-by-step, making us into a miniature computer.
 
@@ -86,7 +59,7 @@ That’s precisely why, when employed without careful thought, you might inadver
 
 Consider this Java example,
 
-Here one paymentMethod can be completely different from the other. But with this switch statement, we are coupling them into one.
+{{< custom-gist "6ad935e9fb69d3d39b8b9d70e60155bc" "Here one paymentMethod can be completely different from the other. But with this switch statement, we are coupling them into one." >}}
 
 The above code is actually trying to centralize the logic of calculating discount for various payment instruments in a single place.
 
@@ -96,14 +69,15 @@ If you look closely it’s actually violating [Open–closed principle](https://
 
 But if we refactor the code like
 
+{{< custom-gist "e79362f8fe0ef7606c04b7a6f8e37d54" "" >}}
 then you can simply do,
 
-```
+{{< highlight python >}}
 public static double getDiscount(DiscountProvider discountProvider, int amt){  
         double discount  = discountProvider.getDiscount();  
-        return amt \* (discount / 100);  
+        return amt * (discount / 100);  
     }
-```
+{{< /highlight >}}
 
 Now you can see, there’s no ambiguity here. When a new case comes in you don’t have to change the above function but rather “extend” it by creating a new class that just implements the `DiscountProvider` interface.
 
@@ -114,15 +88,15 @@ Now you can see, there’s no ambiguity here. When a new case comes in you don�
 
 When dealing with if-else blocks, it’s common knowledge that the program enters an ‘else’ block only when the preceding ‘if’ condition fails. While this assumption seems reasonable, relying on it to shape our predicates can lead to unintended consequences. Consider this below example:
 
-```
-def get\_welcome\_message(age):  
+{{< highlight python >}}
+def get_welcome_message(age):  
     if age < 18:  
         print("Too young")  
     elif age < 65:  
         print("Come in")  
     else:  
         print("Too old")
-```
+{{< /highlight >}}
 
 This code functions as expected, but what if someone modifies the initial ‘if’ condition to `age == 18`? Subsequent checks, such as `age < 65`, which was implicitly assuming `age >= 18 and age < 65` will start giving incorrect outputs.
 
@@ -146,4 +120,9 @@ Disclaimer⚠️
 ============
 
 While I have joined the anti-if campaign, it doesn’t imply that I will never include branching statements in my code. I believe it’s virtually impossible to write code without branching statements. To draw a comparison, it’s somewhat akin to an anti-drug campaign that doesn’t seek to discourage the use of drugs for legitimate medical purposes. The primary aim of the anti-if campaign is to eliminate its usage where it is inappropriate, recognizing that, like drugs, branching statements can also have their valid place in your codebase.
+
+{{< img-with-credit image_url="meme.png" >}} {{< /img-with-credit >}}
+
+Thank you for taking the time to read the article. I’d appreciate it if you would kindly consider sharing your own engaging stories related to if-else statements in the comment section. Your experiences🧙🏻 and insights can contribute to a valuable discussion.
+
 
